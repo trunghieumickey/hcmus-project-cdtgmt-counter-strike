@@ -14,14 +14,9 @@ camera.lookAt(scene.position);
 // Create a renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x87ceeb, 1);
 renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
-
-// Create skybox
-const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-const skyboxMaterial = new THREE.MeshBasicMaterial({ color: 0x87ceeb, side: THREE.BackSide });
-const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-scene.add(skybox);
 
 //create abient light
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
