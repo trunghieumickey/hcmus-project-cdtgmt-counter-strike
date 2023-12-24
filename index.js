@@ -6,6 +6,9 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { OctreeHelper } from 'three/addons/helpers/OctreeHelper.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
+import { createPlayer, teleportPlayerIfOob } from './control/player.js';
+import { control, controls } from './control/control.js';
+
 const STEPS_PER_FRAME = 5;
 const GRAVITY = 30;
 
@@ -70,183 +73,56 @@ function onWindowResize() {
 
 
 // ====================== Player ======================
+// Create a player
+const player = createPlayer();
+scene.add(player);
 
-const playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(0, 1, 0), 0.35);
-const playerVelocity = new THREE.Vector3();
-const playerDirection = new THREE.Vector3();
+player.playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(0, 1, 0), 0.35);
+player.playerVelocity = new THREE.Vector3();
+player.playerDirection = new THREE.Vector3();
+
+const playerCollider = player.playerCollider;
+const playerVelocity = player.playerVelocity;
+const playerDirection = player.playerDirection;
 
 let playerOnFloor = false;
 let mouseTime = 0;
 
 const keyStates = {};
 
-const vector1 = new THREE.Vector3();
-const vector2 = new THREE.Vector3();
-const vector3 = new THREE.Vector3();
-
-document.addEventListener('keydown', (event) => {
-
-  keyStates[event.code] = true;
-
-});
-
-document.addEventListener('keyup', (event) => {
-
-  keyStates[event.code] = false;
-
-});
-
-document.addEventListener('mousedown', () => {
-
-  document.body.requestPointerLock();
-
-  mouseTime = performance.now();
-
-});
-
-document.addEventListener('mouseup', () => {
-
-  if (document.pointerLockElement !== null) throwBall();
-
-});
-
-document.body.addEventListener('mousemove', (event) => {
-
-  if (document.pointerLockElement === document.body) {
-
-    camera.rotation.y -= event.movementX / 500;
-    camera.rotation.x -= event.movementY / 500;
-
-  }
-
-});
-
-//listen for tab key
+control();
 
 function playerCollisions() {
-
   const result = worldOctree.capsuleIntersect(playerCollider);
-
   playerOnFloor = false;
-
   if (result) {
-
     playerOnFloor = result.normal.y > 0;
-    
-
     if (!playerOnFloor) {
-
       playerVelocity.addScaledVector(result.normal, - result.normal.dot(playerVelocity));
-
     }
-
     playerCollider.translate(result.normal.multiplyScalar(result.depth));
-
   }
-
 }
 
 function updatePlayer(deltaTime) {
-
   let damping = Math.exp(- 4 * deltaTime) - 1;
-
   if (!playerOnFloor) {
-
     playerVelocity.y -= GRAVITY * deltaTime;
-
     // small air resistance
     damping *= 0.1;
-
   }
-
   playerVelocity.addScaledVector(playerVelocity, damping);
-
   const deltaPosition = playerVelocity.clone().multiplyScalar(deltaTime);
   playerCollider.translate(deltaPosition);
-
   playerCollisions();
-
   camera.position.copy(playerCollider.end);
-
 }
 
-function getForwardVector() {
-
-  camera.getWorldDirection(playerDirection);
-  playerDirection.y = 0;
-  playerDirection.normalize();
-
-  return playerDirection;
-
-}
-
-function getSideVector() {
-
-  camera.getWorldDirection(playerDirection);
-  playerDirection.y = 0;
-  playerDirection.normalize();
-  playerDirection.cross(camera.up);
-
-  return playerDirection;
-
-}
-
-function controls(deltaTime) {
-
-  // gives a bit of air control
-  const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
-
-  if (keyStates['KeyW']) {
-
-    playerVelocity.add(getForwardVector().multiplyScalar(speedDelta));
-
-  }
-
-  if (keyStates['KeyS']) {
-
-    playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta));
-
-  }
-
-  if (keyStates['KeyA']) {
-
-    playerVelocity.add(getSideVector().multiplyScalar(- speedDelta));
-
-  }
-
-  if (keyStates['KeyD']) {
-
-    playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
-
-  }
-
-  if (playerOnFloor) {
-
-    if (keyStates['Space']) {
-
-      playerVelocity.y = 8;
-
-    }
-
-  }
-
-}
-
-function teleportPlayerIfOob() {
-
-  if (camera.position.y <= - 25) {
-
-    playerCollider.start.set(0, 0.35, 0);
-    playerCollider.end.set(0, 1, 0);
-    playerCollider.radius = 0.35;
-    camera.position.copy(playerCollider.end);
-    camera.rotation.set(0, 0, 0);
-
-  }
-}
+export { worldOctree, keyStates, mouseTime, playerOnFloor, playerCollider, playerVelocity, playerDirection, camera };
 
 function animate() {
-  console.log(worldOctree.objects);
+  //console.log(worldOctree.objects);
+
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 
   // we look for collisions in substeps to mitigate the risk of
@@ -261,7 +137,7 @@ function animate() {
   if (keyStates['KeyQ']) {
     renderer.render(scene, overviewCamera);
   } else {
-  renderer.render(scene, camera);
+    renderer.render(scene, camera);
   }
   requestAnimationFrame(animate);
 
