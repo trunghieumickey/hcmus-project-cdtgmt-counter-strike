@@ -2,8 +2,8 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 import { Octree } from 'three/addons/math/Octree.js';
-import { createPlayer, teleportPlayerIfOob, updatePlayer } from './control/player.js';
-import { control, controls, keyStates } from './control/control.js';
+import { createPlayer, teleportPlayerIfOob, updatePlayer } from './player.js';
+import { control, controls, keyStates } from './control.js';
 
 const STEPS_PER_FRAME = 5;
 const worldOctree = new Octree();

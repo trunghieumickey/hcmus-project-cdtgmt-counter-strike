@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Capsule } from 'three/addons/math/Capsule.js';
-import { worldOctree, player, camera } from '../index.js';
+import { worldOctree, player, camera } from './index.js';
 
 export let playerOnFloor = false;
 const GRAVITY = 30;

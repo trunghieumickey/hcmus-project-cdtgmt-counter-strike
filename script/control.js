@@ -1,4 +1,4 @@
-import { camera, player } from '../index.js';
+import { camera, player } from './index.js';
 import { playerOnFloor } from './player.js';
 
 export const keyStates = {};
