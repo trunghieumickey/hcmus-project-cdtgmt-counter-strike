@@ -41,7 +41,6 @@ export function updatePlayer(deltaTime) {
     let damping = Math.exp(- 4 * deltaTime) - 1;
     if (!playerOnFloor) {
         player.playerVelocity.y -= GRAVITY * deltaTime;
-        // small air resistance
         damping *= 0.1;
     }
     player.playerVelocity.addScaledVector(player.playerVelocity, damping);
