@@ -4,12 +4,10 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 import { Octree } from 'three/addons/math/Octree.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
-import { createPlayer, teleportPlayerIfOob } from './control/player.js';
-import { control, controls } from './control/control.js';
+import { createPlayer, teleportPlayerIfOob, updatePlayer, playerOnFloor } from './control/player.js';
+import { control, controls, keyStates } from './control/control.js';
 
 const STEPS_PER_FRAME = 5;
-const GRAVITY = 30;
-
 const worldOctree = new Octree();
 const clock = new THREE.Clock();
 const scene = new THREE.Scene();
@@ -74,49 +72,9 @@ function onWindowResize() {
 // Create a player
 const player = createPlayer();
 scene.add(player);
-
-player.playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(0, 1, 0), 0.35);
-player.playerVelocity = new THREE.Vector3();
-player.playerDirection = new THREE.Vector3();
-
-const playerCollider = player.playerCollider;
-const playerVelocity = player.playerVelocity;
-const playerDirection = player.playerDirection;
-
-let playerOnFloor = false;
-let mouseTime = 0;
-
-const keyStates = {};
-
 control();
 
-function playerCollisions() {
-  const result = worldOctree.capsuleIntersect(playerCollider);
-  playerOnFloor = false;
-  if (result) {
-    playerOnFloor = result.normal.y > 0;
-    if (!playerOnFloor) {
-      playerVelocity.addScaledVector(result.normal, - result.normal.dot(playerVelocity));
-    }
-    playerCollider.translate(result.normal.multiplyScalar(result.depth));
-  }
-}
-
-function updatePlayer(deltaTime) {
-  let damping = Math.exp(- 4 * deltaTime) - 1;
-  if (!playerOnFloor) {
-    playerVelocity.y -= GRAVITY * deltaTime;
-    // small air resistance
-    damping *= 0.1;
-  }
-  playerVelocity.addScaledVector(playerVelocity, damping);
-  const deltaPosition = playerVelocity.clone().multiplyScalar(deltaTime);
-  playerCollider.translate(deltaPosition);
-  playerCollisions();
-  camera.position.copy(playerCollider.end);
-}
-
-export { worldOctree, keyStates, mouseTime, playerOnFloor, playerCollider, playerVelocity, playerDirection, camera };
+export { worldOctree, player, camera, playerOnFloor };
 
 function animate() {
   //console.log(worldOctree.objects);

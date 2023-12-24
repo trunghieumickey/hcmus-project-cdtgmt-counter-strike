@@ -1,4 +1,8 @@
-import { camera, keyStates, mouseTime, playerDirection, playerVelocity, playerOnFloor } from '../index.js';
+import { camera, player } from '../index.js';
+import { playerOnFloor } from './player.js';
+
+export const keyStates = {};
+let mouseTime = 0;
 
 //// add keydown and keyup events to the document
 export function control() {
@@ -31,42 +35,42 @@ export function control() {
 
 ////controls
 function getForwardVector() {
-    camera.getWorldDirection(playerDirection);
-    playerDirection.y = 0;
-    playerDirection.normalize();
-    return playerDirection;
+    camera.getWorldDirection(player.playerDirection);
+    player.playerDirection.y = 0;
+    player.playerDirection.normalize();
+    return player.playerDirection;
 }
 
 function getSideVector() {
-    camera.getWorldDirection(playerDirection);
-    playerDirection.y = 0;
-    playerDirection.normalize();
-    playerDirection.cross(camera.up);
-    return playerDirection;
+    camera.getWorldDirection(player.playerDirection);
+    player.playerDirection.y = 0;
+    player.playerDirection.normalize();
+    player.playerDirection.cross(camera.up);
+    return player.playerDirection;
 }
 
 export function controls(deltaTime) {
     // gives a bit of air control
     const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
     if (keyStates['KeyW']) {
-        playerVelocity.add(getForwardVector().multiplyScalar(speedDelta));
+        player.playerVelocity.add(getForwardVector().multiplyScalar(speedDelta));
     }
 
     if (keyStates['KeyS']) {
-        playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta));
+        player.playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta));
     }
 
     if (keyStates['KeyA']) {
-        playerVelocity.add(getSideVector().multiplyScalar(- speedDelta));
+        player.playerVelocity.add(getSideVector().multiplyScalar(- speedDelta));
     }
 
     if (keyStates['KeyD']) {
-        playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
+        player.playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
     }
 
     if (playerOnFloor) {
         if (keyStates['Space']) {
-            playerVelocity.y = 8;
+            player.playerVelocity.y = 8;
         }
     }
 }
