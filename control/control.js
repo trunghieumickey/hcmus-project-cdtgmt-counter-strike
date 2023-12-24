@@ -17,7 +17,7 @@ export function control() {
     });
 
     document.addEventListener('mouseup', () => {
-        if (document.pointerLockElement !== null) throwBall();
+        if (document.pointerLockElement !== null) null;
     });
 
     document.body.addEventListener('mousemove', (event) => {

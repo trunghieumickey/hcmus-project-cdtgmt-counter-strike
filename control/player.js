@@ -16,7 +16,7 @@ export function createPlayer() {
     return Player;
 }
 
-// export function playerCollisions() {
+// function playerCollisions() {
 //     const result = worldOctree.capsuleIntersect(playerCollider);
 //     let playerOnFloor = false;
 //     if (result) {
