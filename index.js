@@ -2,8 +2,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 import { Octree } from 'three/addons/math/Octree.js';
-import { Capsule } from 'three/addons/math/Capsule.js';
-
 import { createPlayer, teleportPlayerIfOob, updatePlayer, playerOnFloor } from './control/player.js';
 import { control, controls, keyStates } from './control/control.js';
 
@@ -74,7 +72,7 @@ const player = createPlayer();
 scene.add(player);
 control();
 
-export { worldOctree, player, camera, playerOnFloor };
+export { worldOctree, player, camera };
 
 function animate() {
   //console.log(worldOctree.objects);
