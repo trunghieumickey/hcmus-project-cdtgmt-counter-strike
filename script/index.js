@@ -52,7 +52,11 @@ gltfLoader.load('./model/dust2.glb', (gltf) => {
   worldOctree.fromGraphNode(mapModel);
   // Now the center of the bounding box should be at the scene's center
   animate();
-});
+},
+  (error) => {
+    console.error('An error occurred while loading the map model:', error);
+  }
+);
 
 window.addEventListener('resize', onWindowResize);
 
@@ -68,11 +72,30 @@ function onWindowResize() {
 
 // ====================== Player ======================
 // Create a player
-const player = createPlayer();
-scene.add(player);
+var characterModel, characterBox, mixer, player;
+let characterFrame = new THREE.Clock();
+gltfLoader.load('./model/walking.glb', (gltf) => {
+  characterModel = gltf.scene;
+  characterModel.scale.set(0.5, 0.5, 0.5);
+  characterBox = new THREE.Box3().setFromObject(characterModel);
+
+  player = createPlayer(characterModel);
+  scene.add(player);
+  
+  const animation = gltf.animations[0];
+  mixer = new THREE.AnimationMixer(characterModel);
+  const action = mixer.clipAction(animation);
+  action.play();
+  animate();
+},
+  (error) => {
+    console.error('An error occurred while loading the character model:', error);
+  }
+);
+
 control();
 
-export { worldOctree, player, camera };
+export { worldOctree, player, camera, characterBox };
 
 function animate() {
   //console.log(worldOctree.objects);
@@ -83,10 +106,13 @@ function animate() {
   // an object traversing another too quickly for detection.
 
   for (let i = 0; i < STEPS_PER_FRAME; i++) {
-
-    controls(deltaTime);
-    updatePlayer(deltaTime);
-    teleportPlayerIfOob();
+    if (player) {
+      // console.log(player.position)
+      controls(deltaTime, characterFrame, mixer);
+      updatePlayer(deltaTime);
+      teleportPlayerIfOob();
+    }
+    
   }
   if (keyStates['KeyQ']) {
     renderer.render(scene, overviewCamera);

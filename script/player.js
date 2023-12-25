@@ -1,16 +1,20 @@
 import * as THREE from 'three';
 import { Capsule } from 'three/addons/math/Capsule.js';
-import { worldOctree, player, camera } from './index.js';
+import { worldOctree, player, camera, characterBox } from './index.js';
 
 export let playerOnFloor = false;
 const GRAVITY = 30;
 
-export function createPlayer() {
-    const Player = new THREE.Object3D();
+export function createPlayer(model) {
+    // const Player = new THREE.Object3D();
+    // if (!characterModel) throw new Error('Character model not loaded');
+    const Player = model;
     Player.playerDirection = new THREE.Vector3();
     Player.PlayerGeometry = new THREE.CylinderGeometry(0.5, 0.5, 2, 32);
     Player.playerDirection = new THREE.Vector3();
     Player.playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(0, 1, 0), 0.35);
+    // Player.playerCollider = new Capsule(characterBox.min, characterBox.max, 0.35);
+    // console.log(characterBox.max.sub(characterBox.min));
     Player.playerVelocity = new THREE.Vector3();
     return Player;
 }
@@ -38,14 +42,19 @@ function playerCollisions() {
 }
 
 export function updatePlayer(deltaTime) {
-    let damping = Math.exp(- 4 * deltaTime) - 1;
-    if (!playerOnFloor) {
-        player.playerVelocity.y -= GRAVITY * deltaTime;
-        damping *= 0.1;
+    if (player) {
+        let damping = Math.exp(- 4 * deltaTime) - 1;
+        if (!playerOnFloor) {
+            player.playerVelocity.y -= GRAVITY * deltaTime;
+            damping *= 0.1;
+        }
+        player.playerVelocity.addScaledVector(player.playerVelocity, damping);
+        const deltaPosition = player.playerVelocity.clone().multiplyScalar(deltaTime);
+        player.playerCollider.translate(deltaPosition);
+        playerCollisions();
+        camera.position.copy(player.playerCollider.end);
+        player.position.copy(player.playerCollider.end);
+        player.position.y -= player.playerCollider.radius;
     }
-    player.playerVelocity.addScaledVector(player.playerVelocity, damping);
-    const deltaPosition = player.playerVelocity.clone().multiplyScalar(deltaTime);
-    player.playerCollider.translate(deltaPosition);
-    playerCollisions();
-    camera.position.copy(player.playerCollider.end);
+    
 }

@@ -28,7 +28,7 @@ export function control() {
         if (document.pointerLockElement === document.body) {
             camera.rotation.y -= event.movementX / 500;
             camera.rotation.x -= event.movementY / 500;
-
+            if(player) {player.rotation.y = camera.rotation.y + Math.PI;}
         }
     });
 }
@@ -49,28 +49,34 @@ function getSideVector() {
     return player.playerDirection;
 }
 
-export function controls(deltaTime) {
+export function controls(deltaTime, characterFrame, mixer) {
     // gives a bit of air control
-    const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
-    if (keyStates['KeyW']) {
-        player.playerVelocity.add(getForwardVector().multiplyScalar(speedDelta));
-    }
-
-    if (keyStates['KeyS']) {
-        player.playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta));
-    }
-
-    if (keyStates['KeyA']) {
-        player.playerVelocity.add(getSideVector().multiplyScalar(- speedDelta));
-    }
-
-    if (keyStates['KeyD']) {
-        player.playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
-    }
-
-    if (playerOnFloor) {
-        if (keyStates['Space']) {
-            player.playerVelocity.y = 8;
+    if (player) {
+        const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
+        if (keyStates['KeyW']) {
+            player.playerVelocity.add(getForwardVector().multiplyScalar(speedDelta));
+            mixer.update(characterFrame.getDelta());
         }
-    }
+    
+        if (keyStates['KeyS']) {
+            player.playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta));
+            mixer.update(characterFrame.getDelta());
+        }
+    
+        if (keyStates['KeyA']) {
+            player.playerVelocity.add(getSideVector().multiplyScalar(- speedDelta));
+            mixer.update(characterFrame.getDelta());
+        }
+    
+        if (keyStates['KeyD']) {
+            player.playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
+            mixer.update(characterFrame.getDelta());
+        }
+    
+        if (playerOnFloor) {
+            if (keyStates['Space']) {
+                player.playerVelocity.y = 8;
+            }
+        }
+    } 
 }
