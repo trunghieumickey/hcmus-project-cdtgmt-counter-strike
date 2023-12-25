@@ -56,5 +56,4 @@ export function updatePlayer(deltaTime) {
         player.position.copy(player.playerCollider.end);
         player.position.y -= player.playerCollider.radius;
     }
-    
 }
