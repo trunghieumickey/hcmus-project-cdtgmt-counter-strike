@@ -29,35 +29,42 @@ renderer.setClearColor(0x87ceeb, 1);
 renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 
-//create abient light
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-scene.add(ambientLight);
-
-//create directional light
-const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-directionalLight.position.set(-100, 20, -15);
-directionalLight.castShadow = true;
-
-directionalLight.shadow.mapSize.width = 2048;
-directionalLight.shadow.mapSize.height = 2048;
-directionalLight.shadow.camera.near = 20;
-directionalLight.shadow.camera.far = 100;
-directionalLight.shadow.bias = 0.0001;
-scene.add(directionalLight);
-
 function createPointLight(x, y, z, color, intensity) {
   const light = new THREE.PointLight(color, intensity);
   light.position.set(x, y, z);
   scene.add(light);
 }
 
-//create point light
-createPointLight(-8.280816536324493, -1.7145130626816656, -5.096525568560011, 0xffffff, 1);
-createPointLight(-10.234694808194166, 0.36766664600374787, 0.4566306343704984, 0xffffff, 1);
-createPointLight(-22.207237053752908, 0.4277614931750433, -0.7766666769981385, 0xffffff, 1);
-createPointLight(8.612399090380979, -2.2000000774860005, -18.316667118668555, 0xffffff, 1);
-createPointLight(11.549537535371229, -0.4933333694938346, 8.056981752795481, 0xffffff, 1);
-createPointLight(21.790000519156457, -2.5507282037711394, 13.029634545254448, 0xffffff, 1);
+let lighting = false;
+if (lighting) {
+  //create directional light
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+  directionalLight.position.set(-100, 20, -15);
+  directionalLight.castShadow = true;
+
+  directionalLight.shadow.mapSize.width = 2048;
+  directionalLight.shadow.mapSize.height = 2048;
+  directionalLight.shadow.camera.near = 20;
+  directionalLight.shadow.camera.far = 100;
+  directionalLight.shadow.bias = 0.0001;
+  scene.add(directionalLight);
+
+  //create point light
+  createPointLight(-8.280816536324493, -1.7145130626816656, -5.096525568560011, 0xffffff, 1);
+  createPointLight(-10.234694808194166, 0.36766664600374787, 0.4566306343704984, 0xffffff, 1);
+  createPointLight(-22.207237053752908, 0.4277614931750433, -0.7766666769981385, 0xffffff, 1);
+  createPointLight(8.612399090380979, -2.2000000774860005, -18.316667118668555, 0xffffff, 1);
+  createPointLight(11.549537535371229, -0.4933333694938346, 8.056981752795481, 0xffffff, 1);
+  createPointLight(21.790000519156457, -2.5507282037711394, 13.029634545254448, 0xffffff, 1);
+
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+  scene.add(ambientLight);
+
+}
+else {
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+  scene.add(ambientLight);
+}
 
 //import model
 const gltfLoader = new GLTFLoader();
