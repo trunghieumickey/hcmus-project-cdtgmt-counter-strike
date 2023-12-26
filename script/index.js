@@ -20,6 +20,7 @@ const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerH
 camera.rotation.order = 'YXZ';
 camera.castShadow = true;
 camera.lookAt(scene.position);
+scene.add(camera);
 
 // Create a renderer
 const renderer = new THREE.WebGLRenderer();
@@ -28,8 +29,8 @@ renderer.setClearColor(0x87ceeb, 1);
 renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 
-function createPointLight(x, y, z, color, intensity) {
-  const light = new THREE.PointLight(color, intensity);
+function createPointLight(x, y, z) {
+  const light = new THREE.PointLight(0xffffff, 1, 100);
   light.position.set(x, y, z);
   light.shadowCameraVisible = true;
   light.shadow.mapSize.width = 2048;
@@ -37,15 +38,18 @@ function createPointLight(x, y, z, color, intensity) {
   light.shadow.camera.near = 20;
   light.shadow.camera.far = 100;
   light.shadow.bias = 0.0001;
-
   scene.add(light);
+
+  //add helper for light
+  const helper = new THREE.PointLightHelper(light);
+  scene.add(helper);
 }
 
-let lighting = false;
+let lighting = true;
 if (lighting) {
   //create directional light
   const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-  directionalLight.position.set(-100, 20, -15);
+  directionalLight.position.set(-100, 40, -4);
   directionalLight.castShadow = true;
 
   directionalLight.shadow.mapSize.width = 2048;
@@ -55,7 +59,20 @@ if (lighting) {
   directionalLight.shadow.bias = 0.0001;
   scene.add(directionalLight);
 
+  const helper = new THREE.DirectionalLightHelper(directionalLight);
+  scene.add(helper);
 
+  //Light in Dust II
+  createPointLight(79.57287971308995, -5.643300100652871, -58.85797348022461);
+  createPointLight(21.990610489906908, -0.7, -25.158002472422947);
+  createPointLight(44.555808320115744, -0.7, -23.060394986331307);
+  createPointLight(48.18740035517612, -4.729054642021601, -34.036189584549135);
+  createPointLight(103.95813903808593, -6.2782811685022695, 0.44196676611882085);
+  createPointLight(84.7581573486328, -2.2301502346108763, -8.761638723017235);
+
+  //Light in Dust
+
+  //Ambient Light
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
 
@@ -114,6 +131,13 @@ function onWindowResize() {
 
 }
 
+const textureLoader = new THREE.TextureLoader();
+const crosshairTexture = textureLoader.load('sprite/crosshair.png');
+const crosshairMaterial = new THREE.SpriteMaterial({ map: crosshairTexture });
+const crosshair = new THREE.Sprite(crosshairMaterial);
+crosshair.scale.set(0.02, 0.02, 0.02);
+crosshair.position.set(0, 0, -0.5);
+camera.add(crosshair);
 
 // ====================== Player ======================
 // Create a player
@@ -144,7 +168,7 @@ export { worldOctree, player, camera, characterBox };
 
 function animate() {
   //console.log(worldOctree.objects);
-  console.log(`Camera position - x: ${camera.position.x}, y: ${camera.position.y}, z: ${camera.position.z}`);
+  console.log(`Camera position - ${camera.position.x}, ${camera.position.y}, ${camera.position.z}`);
 
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 

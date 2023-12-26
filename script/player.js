@@ -4,7 +4,8 @@ import { worldOctree, player, camera, characterBox } from './index.js';
 
 export let playerOnFloor = false;
 const GRAVITY = 30;
-const x = 102, z = -67;
+//const x = 102, z = -67;
+const x = 103.95813903808593, z = 0.44196676611882085
 
 export function createPlayer(model) {
     // const Player = new THREE.Object3D();
@@ -17,6 +18,18 @@ export function createPlayer(model) {
     // Player.playerCollider = new Capsule(characterBox.min, characterBox.max, 0.35);
     // console.log(characterBox.max.sub(characterBox.min));
     Player.playerVelocity = new THREE.Vector3();
+
+    // Create a sphere geometry to represent the point on top of the player
+    const sphereGeometry = new THREE.SphereGeometry(20, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Yellow color
+    const sphere = new THREE.Mesh(sphereGeometry, material);
+
+    // Position the sphere on top of the player
+    sphere.position.set(0, 2.2, 0); // Adjust the y value as needed
+
+    // Add the sphere to the player object
+    Player.add(sphere);
+
     return Player;
 }
 
@@ -56,5 +69,12 @@ export function updatePlayer(deltaTime) {
         camera.position.copy(player.playerCollider.end);
         player.position.copy(player.playerCollider.end);
         player.position.y -= player.playerCollider.radius;
+
+        if (player.position.y > 0.5) {
+            player.position.y = 0.5;
+        }
+        if (camera.position.y > 0.5) {
+            camera.position.y = 0.5;
+        }
     }
 }
