@@ -28,6 +28,10 @@ export function control() {
         if (document.pointerLockElement === document.body) {
             camera.rotation.y -= event.movementX / 500;
             camera.rotation.x -= event.movementY / 500;
+
+            // Limit the vertical rotation of the camera
+            camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
+
             if (player) { player.rotation.y = camera.rotation.y + Math.PI; }
         }
     });
