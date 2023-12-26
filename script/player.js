@@ -6,16 +6,17 @@ export let playerOnFloor = false;
 const GRAVITY = 30;
 //const x = 102, z = -67;
 const x = 103.95813903808593, z = 0.44196676611882085
+const humanWidth = 0.35, humanHeight = 1.8;
 
 export function createPlayer(model) {
     // const Player = new THREE.Object3D();
     // if (!characterModel) throw new Error('Character model not loaded');
     const Player = model;
     Player.playerDirection = new THREE.Vector3();
-    Player.PlayerGeometry = new THREE.CylinderGeometry(0.35, 0.35, 2, 32);
+    Player.PlayerGeometry = new THREE.CylinderGeometry(humanWidth, humanWidth, humanHeight, 32);
     Player.playerDirection = new THREE.Vector3();
-    Player.playerCollider = new Capsule(new THREE.Vector3(x, 0.35, z), new THREE.Vector3(x, 2, z), 0.35);
-    // Player.playerCollider = new Capsule(characterBox.min, characterBox.max, 0.35);
+    Player.playerCollider = new Capsule(new THREE.Vector3(x, humanWidth, z), new THREE.Vector3(x, humanHeight, z), humanWidth);
+    // Player.playerCollider = new Capsule(characterBox.min, characterBox.max, humanWidth);
     // console.log(characterBox.max.sub(characterBox.min));
     Player.playerVelocity = new THREE.Vector3();
 
@@ -25,7 +26,7 @@ export function createPlayer(model) {
     const sphere = new THREE.Mesh(sphereGeometry, material);
 
     // Position the sphere on top of the player
-    sphere.position.set(0, 2.2, 0); // Adjust the y value as needed
+    sphere.position.set(0, 10, 0); // Adjust the y value as needed
 
     // Add the sphere to the player object
     Player.add(sphere);
@@ -35,9 +36,9 @@ export function createPlayer(model) {
 
 export function teleportPlayerIfOob() {
     if (camera.position.y <= - 25) {
-        player.playerCollider.start.set(x, 0.35, z);
+        player.playerCollider.start.set(x, humanWidth, z);
         player.playerCollider.end.set(x, 1, z);
-        player.playerCollider.radius = 0.35;
+        player.playerCollider.radius = humanWidth;
         camera.position.copy(player.playerCollider.end);
         camera.rotation.set(0, 0, 0);
     }
