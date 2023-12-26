@@ -69,12 +69,5 @@ export function updatePlayer(deltaTime) {
         camera.position.copy(player.playerCollider.end);
         player.position.copy(player.playerCollider.end);
         player.position.y -= player.playerCollider.radius;
-
-        if (player.position.y > 0.5) {
-            player.position.y = 0.5;
-        }
-        if (camera.position.y > 0.5) {
-            camera.position.y = 0.5;
-        }
     }
 }
