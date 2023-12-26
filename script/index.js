@@ -160,8 +160,6 @@ var characterModel, characterBox, mixer, player;
 let characterFrame = new THREE.Clock();
 gltfLoader.load('./model/walking.glb', (gltf) => {
   characterModel = gltf.scene;
-  characterModel.scale.set(0.1, 0.1, 0.1);
-  characterBox = new THREE.Box3().setFromObject(characterModel);
 
   player = createPlayer(characterModel);
   scene.add(player);

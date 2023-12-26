@@ -12,6 +12,7 @@ export function createPlayer(model) {
     // const Player = new THREE.Object3D();
     // if (!characterModel) throw new Error('Character model not loaded');
     const Player = model;
+    Player.scale.set(0.1, 0.1, 0.1);
     Player.playerDirection = new THREE.Vector3();
     Player.PlayerGeometry = new THREE.CylinderGeometry(humanWidth, humanWidth, humanHeight, 32);
     Player.playerDirection = new THREE.Vector3();
@@ -22,11 +23,11 @@ export function createPlayer(model) {
 
     // Create a sphere geometry to represent the point on top of the player
     const sphereGeometry = new THREE.SphereGeometry(20, 32, 32);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Yellow color
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff }); // Yellow color
     const sphere = new THREE.Mesh(sphereGeometry, material);
 
     // Position the sphere on top of the player
-    sphere.position.set(0, 10, 0); // Adjust the y value as needed
+    sphere.position.set(0, 2, 0); // Adjust the y value as needed
 
     // Add the sphere to the player object
     Player.add(sphere);
