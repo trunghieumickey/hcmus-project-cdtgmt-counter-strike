@@ -187,9 +187,17 @@ function updateOverviewCamera() {
   overviewRenderer.render(scene, overviewCamera);
 }
 
+// Create a DOM element to display the camera position
+const cameraPositionElement = document.createElement('div');
+cameraPositionElement.style.position = 'absolute';
+cameraPositionElement.style.top = '10px';
+cameraPositionElement.style.left = '10px';
+cameraPositionElement.style.color = 'white';
+document.body.appendChild(cameraPositionElement);
+
 function animate() {
-  //console.log(worldOctree.objects);
-  console.log(`Camera position - ${camera.position.x}, ${camera.position.y}, ${camera.position.z}`);
+  // Update the camera position element
+  cameraPositionElement.textContent = `Camera position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}`;
 
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 
@@ -198,7 +206,6 @@ function animate() {
 
   for (let i = 0; i < STEPS_PER_FRAME; i++) {
     if (player) {
-      // console.log(player.position)
       controls(deltaTime, characterFrame, mixer);
       updatePlayer(deltaTime);
       teleportPlayerIfOob();

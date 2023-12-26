@@ -6,7 +6,7 @@ export let playerOnFloor = false;
 const GRAVITY = 30;
 //const x = 102, z = -67;
 const x = 103.95813903808593, z = 0.44196676611882085
-const humanWidth = 0.35, humanHeight = 1.8;
+const humanWidth = 0.3, humanHeight = 1.6;
 
 export function createPlayer(model) {
     // const Player = new THREE.Object3D();
