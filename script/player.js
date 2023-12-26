@@ -4,6 +4,7 @@ import { worldOctree, player, camera, characterBox } from './index.js';
 
 export let playerOnFloor = false;
 const GRAVITY = 30;
+const x = 102, z = -67;
 
 export function createPlayer(model) {
     // const Player = new THREE.Object3D();
@@ -12,7 +13,7 @@ export function createPlayer(model) {
     Player.playerDirection = new THREE.Vector3();
     Player.PlayerGeometry = new THREE.CylinderGeometry(0.5, 0.5, 2, 32);
     Player.playerDirection = new THREE.Vector3();
-    Player.playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(0, 1, 0), 0.35);
+    Player.playerCollider = new Capsule(new THREE.Vector3(x, 0.35, z), new THREE.Vector3(x, 1, z), 0.35);
     // Player.playerCollider = new Capsule(characterBox.min, characterBox.max, 0.35);
     // console.log(characterBox.max.sub(characterBox.min));
     Player.playerVelocity = new THREE.Vector3();
@@ -21,8 +22,8 @@ export function createPlayer(model) {
 
 export function teleportPlayerIfOob() {
     if (camera.position.y <= - 25) {
-        player.playerCollider.start.set(0, 0.35, 0);
-        player.playerCollider.end.set(0, 1, 0);
+        player.playerCollider.start.set(x, 0.5, z);
+        player.playerCollider.end.set(x, 1, z);
         player.playerCollider.radius = 0.35;
         camera.position.copy(player.playerCollider.end);
         camera.rotation.set(0, 0, 0);

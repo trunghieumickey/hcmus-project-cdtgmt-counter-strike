@@ -12,9 +12,8 @@ const scene = new THREE.Scene();
 
 //create overview camera (top down, flat)
 const overviewCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
-overviewCamera.position.set(0, 50, 0);
+overviewCamera.position.set(0, 100, 0);
 overviewCamera.rotation.x = - Math.PI / 2;
-
 
 // Create a camera
 const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -32,6 +31,13 @@ document.body.appendChild(renderer.domElement);
 function createPointLight(x, y, z, color, intensity) {
   const light = new THREE.PointLight(color, intensity);
   light.position.set(x, y, z);
+  light.shadowCameraVisible = true;
+  light.shadow.mapSize.width = 2048;
+  light.shadow.mapSize.height = 2048;
+  light.shadow.camera.near = 20;
+  light.shadow.camera.far = 100;
+  light.shadow.bias = 0.0001;
+
   scene.add(light);
 }
 
@@ -49,13 +55,6 @@ if (lighting) {
   directionalLight.shadow.bias = 0.0001;
   scene.add(directionalLight);
 
-  //create point light
-  createPointLight(-8.280816536324493, -1.7145130626816656, -5.096525568560011, 0xffffff, 1);
-  createPointLight(-10.234694808194166, 0.36766664600374787, 0.4566306343704984, 0xffffff, 1);
-  createPointLight(-22.207237053752908, 0.4277614931750433, -0.7766666769981385, 0xffffff, 1);
-  createPointLight(8.612399090380979, -2.2000000774860005, -18.316667118668555, 0xffffff, 1);
-  createPointLight(11.549537535371229, -0.4933333694938346, 8.056981752795481, 0xffffff, 1);
-  createPointLight(21.790000519156457, -2.5507282037711394, 13.029634545254448, 0xffffff, 1);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
@@ -70,7 +69,7 @@ else {
 const gltfLoader = new GLTFLoader();
 var mapModel;
 
-gltfLoader.load('./model/dust2.glb', (gltf) => {
+gltfLoader.load('./model/dust.glb', (gltf) => {
   mapModel = gltf.scene;
 
   // Traverse through all the meshes in the model
@@ -79,6 +78,8 @@ gltfLoader.load('./model/dust2.glb', (gltf) => {
       // Enable shadows for this mesh
       node.castShadow = true;
       node.receiveShadow = true;
+
+      node.material = new THREE.MeshPhongMaterial({ map: node.material.map });
     }
   });
 
