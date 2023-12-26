@@ -69,10 +69,7 @@ if (lighting) {
   directionalLight.shadow.camera.far = 100;
   directionalLight.shadow.bias = 0.0001;
   scene.add(directionalLight);
-
-  const helper = new THREE.DirectionalLightHelper(directionalLight);
-  scene.add(helper);
-
+  
   //Light in Dust II
   createPointLight(79.57287971308995, -5.643300100652871, -58.85797348022461);
   createPointLight(21.990610489906908, -0.7, -25.158002472422947);
