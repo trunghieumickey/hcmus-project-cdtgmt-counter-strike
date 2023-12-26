@@ -11,9 +11,20 @@ const clock = new THREE.Clock();
 const scene = new THREE.Scene();
 
 //create overview camera (top down, flat)
-const overviewCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
+const overviewCamera = new THREE.OrthographicCamera(-125, 125, 125, -125, 1, 1000);
 overviewCamera.position.set(0, 100, 0);
-overviewCamera.rotation.x = - Math.PI / 2;
+overviewCamera.lookAt(scene.position);
+
+//increse camera exposure
+
+const overviewRenderer = new THREE.WebGLRenderer();
+overviewRenderer.setSize(250, 250);
+overviewRenderer.domElement.style.position = 'absolute';
+overviewRenderer.domElement.style.left = '10px';
+overviewRenderer.domElement.style.bottom = '10px';
+document.body.appendChild(overviewRenderer.domElement);
+
+
 
 // Create a camera
 const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -184,11 +195,8 @@ function animate() {
     }
 
   }
-  if (keyStates['KeyQ']) {
-    renderer.render(scene, overviewCamera);
-  } else {
-    renderer.render(scene, camera);
-  }
+  overviewRenderer.render(scene, overviewCamera);
+  renderer.render(scene, camera);
   requestAnimationFrame(animate);
 
 }
