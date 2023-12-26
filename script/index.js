@@ -11,17 +11,19 @@ const clock = new THREE.Clock();
 const scene = new THREE.Scene();
 
 //create overview camera (top down, flat)
-const overviewCamera = new THREE.OrthographicCamera(-125, 125, 125, -125, 1, 1000);
+const overviewCamera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);
 overviewCamera.position.set(0, 100, 0);
 overviewCamera.lookAt(scene.position);
 
 //increse camera exposure
 
 const overviewRenderer = new THREE.WebGLRenderer();
-overviewRenderer.setSize(250, 250);
+overviewRenderer.setSize(200, 200);
 overviewRenderer.domElement.style.position = 'absolute';
-overviewRenderer.domElement.style.left = '10px';
-overviewRenderer.domElement.style.bottom = '10px';
+overviewRenderer.domElement.style.left = '20px';
+overviewRenderer.domElement.style.bottom = '20px';
+overviewRenderer.domElement.style.borderRadius = '50%';
+overviewRenderer.domElement.style.border = '5px solid #ffffff';
 document.body.appendChild(overviewRenderer.domElement);
 
 
@@ -69,7 +71,7 @@ if (lighting) {
   directionalLight.shadow.camera.far = 100;
   directionalLight.shadow.bias = 0.0001;
   scene.add(directionalLight);
-  
+
   //Light in Dust II
   createPointLight(79.57287971308995, -5.643300100652871, -58.85797348022461);
   createPointLight(21.990610489906908, -0.7, -25.158002472422947);
@@ -178,6 +180,13 @@ control();
 
 export { worldOctree, player, camera, characterBox };
 
+function updateOverviewCamera() {
+  overviewCamera.position.x = camera.position.x;
+  overviewCamera.position.z = camera.position.z;
+  overviewCamera.rotation.z = camera.rotation.y;
+  overviewRenderer.render(scene, overviewCamera);
+}
+
 function animate() {
   //console.log(worldOctree.objects);
   console.log(`Camera position - ${camera.position.x}, ${camera.position.y}, ${camera.position.z}`);
@@ -194,10 +203,8 @@ function animate() {
       updatePlayer(deltaTime);
       teleportPlayerIfOob();
     }
-
   }
-  overviewRenderer.render(scene, overviewCamera);
+  updateOverviewCamera()
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
-
 }
