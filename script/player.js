@@ -12,9 +12,9 @@ export function createPlayer(model) {
     // if (!characterModel) throw new Error('Character model not loaded');
     const Player = model;
     Player.playerDirection = new THREE.Vector3();
-    Player.PlayerGeometry = new THREE.CylinderGeometry(0.5, 0.5, 2, 32);
+    Player.PlayerGeometry = new THREE.CylinderGeometry(0.35, 0.35, 2, 32);
     Player.playerDirection = new THREE.Vector3();
-    Player.playerCollider = new Capsule(new THREE.Vector3(x, 0.35, z), new THREE.Vector3(x, 1, z), 0.35);
+    Player.playerCollider = new Capsule(new THREE.Vector3(x, 0.35, z), new THREE.Vector3(x, 2, z), 0.35);
     // Player.playerCollider = new Capsule(characterBox.min, characterBox.max, 0.35);
     // console.log(characterBox.max.sub(characterBox.min));
     Player.playerVelocity = new THREE.Vector3();
@@ -35,7 +35,7 @@ export function createPlayer(model) {
 
 export function teleportPlayerIfOob() {
     if (camera.position.y <= - 25) {
-        player.playerCollider.start.set(x, 0.5, z);
+        player.playerCollider.start.set(x, 0.35, z);
         player.playerCollider.end.set(x, 1, z);
         player.playerCollider.radius = 0.35;
         camera.position.copy(player.playerCollider.end);

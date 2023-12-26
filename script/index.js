@@ -96,7 +96,7 @@ gltfLoader.load('./model/dust.glb', (gltf) => {
       node.castShadow = true;
       node.receiveShadow = true;
 
-      node.material = new THREE.MeshPhongMaterial({ map: node.material.map });
+      node.material = new THREE.MeshStandardMaterial({ map: node.material.map });
     }
   });
 
