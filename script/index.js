@@ -5,12 +5,16 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { createPlayer, teleportPlayerIfOob, updatePlayer } from './player.js';
 import { control, controls, keyStates } from './control.js';
 import { sendMessage } from './network.js';
+import { createHealthBar, createBulletsBar } from './UI.js';
 
 const STEPS_PER_FRAME = 5;
 const worldOctree = new Octree();
 const clock = new THREE.Clock();
 const scene = new THREE.Scene();
 
+//create health bar
+createHealthBar();
+createBulletsBar();
 //create overview camera (top down, flat)
 const overviewCamera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);
 overviewCamera.position.set(0, 100, 0);
