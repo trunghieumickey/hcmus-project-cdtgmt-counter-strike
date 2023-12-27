@@ -141,10 +141,11 @@ function shoot() {
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
 
-    // Play the sound
-    gunSound.play();
     if (gunSound.isPlaying) {
         gunSound.stop();
+        gunSound.play();
+    }
+    else {
         gunSound.play();
     }
 
