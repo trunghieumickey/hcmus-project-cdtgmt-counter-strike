@@ -91,31 +91,46 @@ let gunSound;
 const audioLoader = new THREE.AudioLoader();
 audioLoader.load('sound/AK-47.mp3', function (buffer) {
     gunSound = new THREE.Audio(listener);
+    gunSound.setVolume(0.1);
     gunSound.setBuffer(buffer);
 });
 
+let bullets = [];
 function shoot() {
-    const gunBullet = createGunBullet();
-    gunBullet.position.copy(camera.position);
-    gunBullet.bulletVelocity = getForwardVector().multiplyScalar(20);
-    scene.add(gunBullet);
+    // Create a bullet
+    const bullet = createGunBullet();
+    bullet.position.copy(camera.position);
+    bullet.bulletVelocity.copy(getForwardVector().multiplyScalar(100));
+    bullets.push(bullet);
 
-    // // Create a line to visualize the bullet's trajectory
-    // const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
-    // const points = [];
-    // //points.push(new THREE.Vector3().copy(camera.position));
-    // points.push(new THREE.Vector3().copy(camera.position).add(gunBullet.bulletVelocityVelocity));
-    // const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    // const line = new THREE.Line(geometry, material);
-    // scene.add(line);
+    // Create a raycaster
+    const raycaster = new THREE.Raycaster();
+    raycaster.set(camera.position, getForwardVector());
+    raycaster.camera = camera; // Set the Raycaster.camera property to the camera object
+
+    // Perform the raycast
+    const intersects = raycaster.intersectObjects(scene.children, true);
+
+    // Create a line to visualize the bullet trajectory
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    const points = [];
+    points.push(new THREE.Vector3().copy(camera.position));
+    const ak47Range = intersects.length > 0 ? intersects[0].distance : 38;
+    points.push(new THREE.Vector3().copy(camera.position).add(getForwardVector().multiplyScalar(ak47Range)));
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    scene.add(line);
 
     // Play the sound
-    if (gunSound) {
+    gunSound.play();
+    if (gunSound.isPlaying) {
+        gunSound.stop();
         gunSound.play();
     }
-    // Remove the bullet after 1 second
+
+    // Remove the bullet and line after 1 second
     setTimeout(() => {
-        scene.remove(gunBullet);
-        //scene.remove(line);
+        scene.remove(line);
+        scene.remove(bullet);
     }, 1000);
 }
