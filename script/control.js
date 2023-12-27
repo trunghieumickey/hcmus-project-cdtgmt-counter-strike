@@ -1,6 +1,7 @@
-import { camera, player } from './index.js';
+import { camera, player, scene, listener } from './index.js';
 import { playerOnFloor } from './player.js';
-
+import { createGunBullet } from './gun_bullet.js';
+import * as THREE from 'three';
 export const keyStates = {};
 let mouseTime = 0;
 
@@ -21,7 +22,7 @@ export function control() {
     });
 
     document.addEventListener('mouseup', () => {
-        if (document.pointerLockElement !== null) null;
+        if (document.pointerLockElement !== null) shoot();
     });
 
     document.body.addEventListener('mousemove', (event) => {
@@ -83,4 +84,38 @@ export function controls(deltaTime, characterFrame, mixer) {
             }
         }
     }
+}
+
+// Load the sound
+let gunSound;
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load('sound/AK-47.mp3', function (buffer) {
+    gunSound = new THREE.Audio(listener);
+    gunSound.setBuffer(buffer);
+});
+
+function shoot() {
+    const gunBullet = createGunBullet();
+    gunBullet.position.copy(camera.position);
+    gunBullet.bulletVelocity = getForwardVector().multiplyScalar(20);
+    scene.add(gunBullet);
+
+    // // Create a line to visualize the bullet's trajectory
+    // const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    // const points = [];
+    // //points.push(new THREE.Vector3().copy(camera.position));
+    // points.push(new THREE.Vector3().copy(camera.position).add(gunBullet.bulletVelocityVelocity));
+    // const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    // const line = new THREE.Line(geometry, material);
+    // scene.add(line);
+
+    // Play the sound
+    if (gunSound) {
+        gunSound.play();
+    }
+    // Remove the bullet after 1 second
+    setTimeout(() => {
+        scene.remove(gunBullet);
+        //scene.remove(line);
+    }, 1000);
 }
