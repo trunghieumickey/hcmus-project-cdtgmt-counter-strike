@@ -55,27 +55,28 @@ function getSideVector() {
 }
 
 export function controls(deltaTime, characterFrame, mixer) {
+    let characterDelta = characterFrame.getDelta();
     // gives a bit of air control
     if (player) {
         const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
         if (keyStates['KeyW']) {
             player.playerVelocity.add(getForwardVector().multiplyScalar(speedDelta));
-            mixer.update(characterFrame.getDelta());
+            mixer.update(characterDelta);
         }
 
         if (keyStates['KeyS']) {
             player.playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta));
-            mixer.update(characterFrame.getDelta());
+            mixer.update(characterDelta);
         }
 
         if (keyStates['KeyA']) {
             player.playerVelocity.add(getSideVector().multiplyScalar(- speedDelta));
-            mixer.update(characterFrame.getDelta());
+            mixer.update(characterDelta);
         }
 
         if (keyStates['KeyD']) {
             player.playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
-            mixer.update(characterFrame.getDelta());
+            mixer.update(characterDelta);
         }
 
         if (playerOnFloor) {
