@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 import { Octree } from 'three/addons/math/Octree.js';
 import { createPlayer, teleportPlayerIfOob, updatePlayer } from './player.js';
 import { control, controls, keyStates } from './control.js';
+import { sendMessage } from './network.js';
 
 const STEPS_PER_FRAME = 5;
 const worldOctree = new Octree();
@@ -183,6 +184,14 @@ function updateOverviewCamera() {
   overviewCamera.position.x = camera.position.x;
   overviewCamera.position.z = camera.position.z;
   overviewCamera.rotation.z = camera.rotation.y;
+  //if holding Q zoom out
+  if (keyStates['KeyQ']) {
+    overviewCamera.zoom = 0.5;
+  }
+  else {
+    overviewCamera.zoom = 1;
+  }
+  overviewCamera.updateProjectionMatrix();
   overviewRenderer.render(scene, overviewCamera);
 }
 
