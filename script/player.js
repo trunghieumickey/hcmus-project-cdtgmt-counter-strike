@@ -5,7 +5,7 @@ import { worldOctree, player, camera, characterBox } from './index.js';
 export let playerOnFloor = false;
 const GRAVITY = 30;
 //const x = 102, z = -67;
-const x = 103.95813903808593, z = 0.44196676611882085
+const x = 106, z = -19;
 const humanWidth = 0.3, humanHeight = 1.6;
 
 export function createPlayer(model) {
