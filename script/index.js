@@ -149,6 +149,14 @@ function onWindowResize() {
 
 
 // ====================== Player ======================
+
+// Add gun to player
+function addGunToPlayer(player, rifleModel) {
+  player.add(rifleModel);
+  rifleModel.position.set(-0.15, 1.4, 0.5);
+  rifleModel.scale.set(0.002, 0.002, 0.002);
+  rifleModel.rotation.set(0, -Math.PI/2 + 0.1, 0);
+}
 // Create a player
 var characterModel, characterBox, mixer, player;
 let characterFrame = new THREE.Clock();
@@ -158,6 +166,11 @@ gltfLoader.load('./model/walking.glb', (gltf) => {
   player = createPlayer(characterModel);
   scene.add(player);
 
+  // Add gun to player
+  if(rifleModel) {
+    addGunToPlayer(player, rifleModel);
+  }
+  
   const animation = gltf.animations[0];
   mixer = new THREE.AnimationMixer(characterModel);
   const action = mixer.clipAction(animation);
@@ -169,9 +182,22 @@ gltfLoader.load('./model/walking.glb', (gltf) => {
   }
 );
 
+let rifleModel;
+gltfLoader.load('./model/ak47.glb', (gltf) => {
+  rifleModel = gltf.scene;
+
+  if(player) {
+    addGunToPlayer(player, rifleModel);
+  }
+},
+  (error) => {
+    console.error('An error occurred while loading the ak47 model:', error);
+  }
+);
+
 control();
 
-export { worldOctree, player, camera, characterBox, scene, listener };
+export { worldOctree, player, rifleModel, camera, characterBox, scene, listener };
 
 function updateOverviewCamera() {
   overviewCamera.position.x = camera.position.x;
