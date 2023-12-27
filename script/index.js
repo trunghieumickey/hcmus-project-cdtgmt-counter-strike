@@ -5,16 +5,13 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { createPlayer, teleportPlayerIfOob, updatePlayer } from './player.js';
 import { control, controls, keyStates } from './control.js';
 import { sendMessage } from './network.js';
-import { createHealthBar, createBulletsBar } from './UI.js';
+import { createUI } from './UI.js';
 
 const STEPS_PER_FRAME = 5;
 const worldOctree = new Octree();
 const clock = new THREE.Clock();
 const scene = new THREE.Scene();
 
-//create health bar
-createHealthBar();
-createBulletsBar();
 //create overview camera (top down, flat)
 const overviewCamera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);
 overviewCamera.position.set(0, 100, 0);
@@ -131,6 +128,7 @@ gltfLoader.load('./model/dust.glb', (gltf) => {
   worldOctree.fromGraphNode(mapModel);
   // Now the center of the bounding box should be at the scene's center
   animate();
+  createUI();
 },
   (error) => {
     console.error('An error occurred while loading the map model:', error);
@@ -147,13 +145,8 @@ function onWindowResize() {
 
 }
 
-const textureLoader = new THREE.TextureLoader();
-const crosshairTexture = textureLoader.load('sprite/crosshair.png');
-const crosshairMaterial = new THREE.SpriteMaterial({ map: crosshairTexture });
-const crosshair = new THREE.Sprite(crosshairMaterial);
-crosshair.scale.set(0.02, 0.02, 0.02);
-crosshair.position.set(0, 0, -0.5);
-camera.add(crosshair);
+
+
 
 // ====================== Player ======================
 // Create a player

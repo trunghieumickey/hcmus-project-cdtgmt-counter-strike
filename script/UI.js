@@ -2,7 +2,7 @@ let health = 100;
 let healthBarElement;
 let healthText;
 
-export function createHealthBar() {
+function createHealthBar() {
     // Create a container for the health bar
     const healthBarContainer = document.createElement('div');
     healthBarContainer.style.position = 'absolute';
@@ -16,7 +16,7 @@ export function createHealthBar() {
 
     // Create the health icon
     const healthIcon = document.createElement('img');
-    healthIcon.src = 'sprite/health.jpg'; // Replace with the path to your health icon
+    healthIcon.src = 'sprite/health.webp'; // Replace with the path to your health icon
     healthIcon.style.position = 'absolute';
     healthIcon.style.left = '-30px'; // Adjust as needed
     healthIcon.style.top = '0px'; // Adjust as needed
@@ -64,11 +64,10 @@ function takeDamage(amount) {
 }
 
 //Bullets Bar 
-let bullets = 25, maxBullets = 25;
-let bulletsBarElement;
-let bulletsText;
+let maxBullets = 25, bullets = maxBullets;
+let bulletsBarElement, bulletsText;
 
-export function createBulletsBar() {
+function createBulletsBar() {
     // Create a container for the bullets bar
     const bulletsBarContainer = document.createElement('div');
     bulletsBarContainer.style.position = 'absolute';
@@ -78,11 +77,12 @@ export function createBulletsBar() {
     bulletsBarContainer.style.width = '200px';
     bulletsBarContainer.style.height = '20px';
     bulletsBarContainer.style.backgroundColor = '#ccc';
+
     document.body.appendChild(bulletsBarContainer);
 
     // Create the bullets icon
     const bulletsIcon = document.createElement('img');
-    bulletsIcon.src = 'sprite/bullet.png'; // Replace with the path to your bullets icon
+    bulletsIcon.src = 'sprite/bullet.webp'; // Replace with the path to your bullets icon
     bulletsIcon.style.position = 'absolute';
     bulletsIcon.style.left = '-30px'; // Adjust as needed
     bulletsIcon.style.top = '0px'; // Adjust as needed
@@ -148,6 +148,26 @@ export function reloadBullets() {
             clearInterval(reloadTimerInterval);
         }, reloadCooldown);
     }
+}
+
+function createCrosshair() {
+    // Create a crosshair image
+    const crosshair = document.createElement('img');
+    crosshair.src = 'sprite/crosshair.webp';
+    crosshair.style.position = 'absolute';
+    crosshair.style.left = '50%';
+    crosshair.style.top = '50%';
+    crosshair.style.transform = 'translate(-50%, -50%)';
+    crosshair.style.width = '20px';
+    crosshair.style.height = '20px';
+    crosshair.style.zIndex = '100';
+    document.body.appendChild(crosshair);
+}
+
+export function createUI() {
+    createHealthBar();
+    createBulletsBar();
+    createCrosshair();
 }
 
 export { bullets }
