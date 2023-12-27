@@ -15,9 +15,13 @@ client.on('connect', () => {
     setInterval(() => {
         sendMessage(JSON.stringify({
             playerNumber: 1, // Replace with the actual player number
-            position: player.position,
-            rotation: player.rotation,
-            status: 0, // Replace with the actual player status
+            action: 'move',
+            position:{
+                x: player.position.x.toFixed(2),
+                y: player.position.y.toFixed(2),
+                z: player.position.z.toFixed(2),
+                r: player.rotation.y.toFixed(2),
+            },
         }));
     }, 500);
 });
