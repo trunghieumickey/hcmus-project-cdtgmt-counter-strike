@@ -15,7 +15,6 @@ export function createPlayer(model) {
     Player.scale.set(0.1, 0.1, 0.1);
     Player.playerDirection = new THREE.Vector3();
     Player.PlayerGeometry = new THREE.CylinderGeometry(humanWidth, humanWidth, humanHeight, 32);
-    Player.playerDirection = new THREE.Vector3();
     Player.playerCollider = new Capsule(new THREE.Vector3(x, humanWidth, z), new THREE.Vector3(x, humanHeight, z), humanWidth);
     // Player.playerCollider = new Capsule(characterBox.min, characterBox.max, humanWidth);
     // console.log(characterBox.max.sub(characterBox.min));

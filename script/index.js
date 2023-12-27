@@ -16,7 +16,6 @@ overviewCamera.position.set(0, 100, 0);
 overviewCamera.lookAt(scene.position);
 
 //increse camera exposure
-
 const overviewRenderer = new THREE.WebGLRenderer();
 overviewRenderer.setSize(200, 200);
 overviewRenderer.domElement.style.position = 'absolute';
@@ -25,8 +24,6 @@ overviewRenderer.domElement.style.bottom = '20px';
 overviewRenderer.domElement.style.borderRadius = '50%';
 overviewRenderer.domElement.style.border = '5px solid #ffffff';
 document.body.appendChild(overviewRenderer.domElement);
-
-
 
 // Create a camera
 const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -41,6 +38,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x87ceeb, 1);
 renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
+
+// Create an audio listener
+const listener = new THREE.AudioListener();
+camera.add(listener);
 
 function createPointLight(x, y, z) {
   const light = new THREE.PointLight(0xffffff, 1, 100);
@@ -138,7 +139,6 @@ gltfLoader.load('./model/dust.glb', (gltf) => {
 window.addEventListener('resize', onWindowResize);
 
 function onWindowResize() {
-
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
@@ -177,7 +177,7 @@ gltfLoader.load('./model/walking.glb', (gltf) => {
 
 control();
 
-export { worldOctree, player, camera, characterBox };
+export { worldOctree, player, camera, characterBox, scene, listener };
 
 function updateOverviewCamera() {
   overviewCamera.position.x = camera.position.x;
@@ -194,23 +194,32 @@ cameraPositionElement.style.left = '10px';
 cameraPositionElement.style.color = 'white';
 document.body.appendChild(cameraPositionElement);
 
+let lastFrameTime = Date.now();
+const frameDuration = 1000 / 30;
+
 function animate() {
-  // Update the camera position element
-  cameraPositionElement.textContent = `Camera position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}`;
+  const currentTime = Date.now();
+  const timeSinceLastFrame = currentTime - lastFrameTime;
+  if (timeSinceLastFrame >= frameDuration) {
+    // Update the camera position element
+    cameraPositionElement.textContent = `Camera position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}`;
 
-  const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
+    const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 
-  // we look for collisions in substeps to mitigate the risk of
-  // an object traversing another too quickly for detection.
+    // we look for collisions in substeps to mitigate the risk of
+    // an object traversing another too quickly for detection.
 
-  for (let i = 0; i < STEPS_PER_FRAME; i++) {
-    if (player) {
-      controls(deltaTime, characterFrame, mixer);
-      updatePlayer(deltaTime);
-      teleportPlayerIfOob();
+    for (let i = 0; i < STEPS_PER_FRAME; i++) {
+      if (player) {
+        controls(deltaTime, characterFrame, mixer);
+        updatePlayer(deltaTime);
+        teleportPlayerIfOob();
+      }
     }
+    updateOverviewCamera()
+    renderer.render(scene, camera);
+
+    lastFrameTime = currentTime;
   }
-  updateOverviewCamera()
-  renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
