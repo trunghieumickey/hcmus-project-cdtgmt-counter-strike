@@ -1,6 +1,7 @@
 import { camera, player, scene, listener } from './index.js';
 import { playerOnFloor } from './player.js';
 import { createGunBullet } from './gun_bullet.js';
+import { bullets, takeBullets, reloadBullets } from './UI.js';
 import * as THREE from 'three';
 export const keyStates = {};
 let mouseTime = 0;
@@ -22,7 +23,10 @@ export function control() {
     });
 
     document.addEventListener('mouseup', () => {
-        if (document.pointerLockElement !== null) shoot();
+        if (document.pointerLockElement !== null && bullets > 0) {
+            shoot();
+            takeBullets(1);
+        };
     });
 
     document.body.addEventListener('mousemove', (event) => {
@@ -84,6 +88,15 @@ export function controls(deltaTime, characterFrame, mixer) {
                 player.playerVelocity.y = 10;
             }
         }
+
+        //Reload bullets
+        if (keyStates['KeyR']) {
+            reloadBullets();
+        }
+
+        if (bullets === 0) {
+            reloadBullets();
+        }
     }
 }
 
@@ -96,13 +109,13 @@ audioLoader.load('sound/AK-47.mp3', function (buffer) {
     gunSound.setBuffer(buffer);
 });
 
-let bullets = [];
+let Bullets = [];
 function shoot() {
     // Create a bullet
     const bullet = createGunBullet();
     bullet.position.copy(camera.position);
     bullet.bulletVelocity.copy(getForwardVector().multiplyScalar(100));
-    bullets.push(bullet);
+    Bullets.push(bullet);
 
     // Create a raycaster
     const raycaster = new THREE.Raycaster();
