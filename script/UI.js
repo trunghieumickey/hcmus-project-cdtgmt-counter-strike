@@ -129,6 +129,7 @@ export function reloadBullets() {
 
     // Check if enough time has passed since the last reload
     if (!reloadTimeout && currentTime - lastReloadTime >= reloadCooldown) {
+        bullets = 0;
         let remainingTime = reloadCooldown / 1000;
         bulletsText.textContent = `Reload in: ${remainingTime.toFixed(1)}`;
 

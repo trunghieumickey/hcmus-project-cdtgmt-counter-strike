@@ -197,7 +197,7 @@ gltfLoader.load('./model/ak47.glb', (gltf) => {
 
 control();
 
-export { worldOctree, player, rifleModel, camera, characterBox, scene, listener };
+export { worldOctree, player, rifleModel, camera, characterBox, scene, listener};
 
 function updateOverviewCamera() {
   overviewCamera.position.x = camera.position.x;
