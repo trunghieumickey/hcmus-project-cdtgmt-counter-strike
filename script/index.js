@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 import { Octree } from 'three/addons/math/Octree.js';
 import { createPlayer, teleportPlayerIfOob, updatePlayer } from './player.js';
 import { control, controls, keyStates } from './control.js';
-import { sendMessage } from './network.js';
+import { updateNetworkPlayers } from './network.js';
 import { createUI } from './UI.js';
 
 const STEPS_PER_FRAME = 5;
@@ -249,6 +249,7 @@ function animate() {
       controls(deltaTime, characterFrame, mixer);
       updatePlayer(deltaTime);
       teleportPlayerIfOob();
+      updateNetworkPlayers(deltaTime);
     }
   }
   updateOverviewCamera()

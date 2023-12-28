@@ -5,9 +5,34 @@ import * as THREE from "three";
 const client = mqtt.connect('wss://test.mosquitto.org:8081');
 const topic = 'hcmus-cs';
 const playerID = Math.floor(Math.random() * 0x100000000).toString(16).padStart(8, '0');
+const targetPositions = [];
 
 export function sendMessage(message) {
     client.publish(topic, message);
+}
+
+export function updateNetworkPlayers(deltaTime) {
+    const speed = 5.0; // Adjust the speed as needed
+    const step = speed * deltaTime;
+
+    for (const playerID in targetPositions) {
+        const targetPosition = targetPositions[playerID];
+        const player = scene.getObjectByName(playerID);
+        if (player) {
+            const distanceX = targetPosition.x - player.position.x;
+            const distanceY = targetPosition.y - player.position.y;
+            const distanceZ = targetPosition.z - player.position.z;
+            const distanceR = targetPosition.r - player.rotation.y;
+            const stepX = distanceX * step;
+            const stepY = distanceY * step;
+            const stepZ = distanceZ * step;
+            const stepR = distanceR * step;
+            player.position.x += stepX;
+            player.position.y += stepY;
+            player.position.z += stepZ;
+            player.rotation.y += stepR;
+        }
+    }
 }
 
 function messageHandler(message) {
@@ -24,7 +49,9 @@ function messageHandler(message) {
                     console.log("add new player")
                     scene.add(player);
                 }
-                player.position.set(message.position.x, message.position.y, message.position.z);
+                // player.position.set(message.position.x, message.position.y, message.position.z);
+                
+                targetPositions[message.playerID] = message.position;
                 player.rotation.y = message.position.r;
                 console.log("player: ", player.position);
             }
@@ -70,7 +97,7 @@ client.on('connect', () => {
             sendMessage(currentMessage);
             lastSentMessage = currentMessage;
         }
-    }, 100);
+    }, 50);
 });
 
 client.on('message', (topic, message) => {
