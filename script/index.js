@@ -158,7 +158,8 @@ function addGunToPlayer(player, rifleModel) {
   rifleModel.rotation.set(0, -Math.PI / 2 + 0.1, 0);
 }
 // Create a player
-var characterModel, characterBox, mixer, player;
+var mixer, player;
+var walking, dying;
 let characterFrame = new THREE.Clock();
 gltfLoader.load('./model/player.glb', (gltf) => {
   characterModel = gltf.scene;
@@ -171,8 +172,8 @@ gltfLoader.load('./model/player.glb', (gltf) => {
     addGunToPlayer(player, rifleModel);
   }
   // Player animations
-  const walking = gltf.animations[0];
-  const dying = gltf.animations[1];
+  walking = gltf.animations[0];
+  dying = gltf.animations[1];
 
   mixer = new THREE.AnimationMixer(characterModel);
   const action = mixer.clipAction(walking);
@@ -184,6 +185,11 @@ gltfLoader.load('./model/player.glb', (gltf) => {
     console.warn('Unknown mesh character model:', error);
   }
 );
+
+export function playDyingAnimation() {
+  const action = mixer.clipAction(dying);
+  action.play();
+}
 
 let rifleModel;
 gltfLoader.load('./model/ak47.glb', (gltf) => {
@@ -200,7 +206,7 @@ gltfLoader.load('./model/ak47.glb', (gltf) => {
 
 control();
 
-export { worldOctree, player, rifleModel, camera, characterBox, scene, listener, characterModel };
+export { worldOctree, player, rifleModel, camera, scene, listener };
 
 function updateOverviewCamera() {
   overviewCamera.position.x = camera.position.x;
