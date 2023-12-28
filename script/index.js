@@ -131,7 +131,7 @@ gltfLoader.load('./model/dust.glb', (gltf) => {
   createUI();
 },
   (error) => {
-    console.error('An error occurred while loading the map model:', error);
+    console.warn('Unknown mesh map model:', error);
   }
 );
 
@@ -178,7 +178,7 @@ gltfLoader.load('./model/walking.glb', (gltf) => {
   animate();
 },
   (error) => {
-    console.error('An error occurred while loading the character model:', error);
+    console.warn('Unknown mesh character model:', error);
   }
 );
 
@@ -191,7 +191,7 @@ gltfLoader.load('./model/ak47.glb', (gltf) => {
   }
 },
   (error) => {
-    console.error('An error occurred while loading the ak47 model:', error);
+    console.warn('Unknown mesh ak47 model:', error);
   }
 );
 
