@@ -1,7 +1,8 @@
 import mqtt from "mqtt";
 import { player, scene } from "./index.js";
 import * as THREE from "three";
-import { takeDamage, addKillFeedEntry } from "./UI.js";
+import { takeDamage, showDeadScreen, health } from "./UI.js";
+
 
 const client = mqtt.connect('wss://test.mosquitto.org:8081');
 const topic = 'hcmus-cs';
@@ -82,6 +83,16 @@ function messageHandler(message) {
                 takeDamage(message.amount);
             }
             break;
+        case 'you_died':
+            if (message.playerID === playerID) {
+                showDeadScreen();
+                //your model will be removed
+                const player = scene.getObjectByName(message.playerID);
+                if (player) {
+                    scene.remove(player);
+                }
+            }
+            break;
         default:
             break;
     }
@@ -92,7 +103,7 @@ let lastSentMessage = null;
 client.on('connect', () => {
     console.log('Connected to MQTT broker');
     client.subscribe(topic);
-    //for every 500ms, send a message to the server
+    //for every 50ms, send a message to the server
     setInterval(() => {
         const currentMessage = JSON.stringify({
             playerID: playerID,
@@ -119,6 +130,14 @@ client.on('connect', () => {
             });
             sendMessage(message);
             player_shot = false;
+        }
+        if (health <= 0) {
+            console.log("you died");
+            const message = JSON.stringify({
+                playerID: playerID,
+                action: 'you_died',
+            });
+            sendMessage(message);
         }
     }, 50);
 });

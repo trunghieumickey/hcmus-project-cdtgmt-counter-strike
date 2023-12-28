@@ -184,40 +184,15 @@ function createDeadScreen() {
     deadScreen.textContent = 'You are dead!';
 
     document.body.appendChild(deadScreen);
+
+    //After 3 seconds, remove the dead screen
+    setTimeout(() => {
+        deadScreen.remove();
+    }, 3000);
 }
 
 export function showDeadScreen() {
     createDeadScreen();
-}
-
-// Create kill feed
-function createKillFeed() {
-    const killFeed = document.createElement('div');
-    killFeed.style.position = 'absolute';
-    killFeed.style.left = '0';
-    killFeed.style.top = '0';
-    killFeed.style.width = '100%';
-    killFeed.style.height = '100%';
-    killFeed.style.color = 'white';
-    killFeed.style.fontSize = '30px';
-    killFeed.style.textAlign = 'center';
-    killFeed.style.paddingTop = '50px';
-
-    document.body.appendChild(killFeed);
-}
-
-export function addKillFeedEntry(killerName, victimName) {
-    const killFeed = document.querySelector('#kill-feed');
-    if (killFeed) {
-        const entry = document.createElement('div');
-        entry.textContent = `${killerName} killed ${victimName}`;
-        killFeed.appendChild(entry);
-
-        // Remove the entry after 5 seconds
-        setTimeout(() => {
-            killFeed.removeChild(entry);
-        }, 5000);
-    }
 }
 
 export function createUI() {
