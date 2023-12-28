@@ -6,6 +6,7 @@ import { createPlayer, teleportPlayerIfOob, updatePlayer } from './player.js';
 import { control, controls, keyStates } from './control.js';
 import { updateNetworkPlayers } from './network.js';
 import { createUI } from './UI.js';
+import { clone } from 'three/addons/utils/SkeletonUtils.js';
 
 const STEPS_PER_FRAME = 5;
 const worldOctree = new Octree();
@@ -166,8 +167,8 @@ gltfLoader.load('./model/player.glb', (gltf) => {
   scene.add(player);
 
   // Add gun to player
-  if (rifleModel) {
-    addGunToPlayer(player, rifleModel);
+  if (gun) {
+    addGunToPlayer(player, gun);
   }
   // Player animations
   walking = gltf.animations[0];
@@ -193,12 +194,12 @@ export function playWalkingAnimation() {
   action.play();
 }
 
-let rifleModel;
+let gun;
 gltfLoader.load('./model/ak47.glb', (gltf) => {
   rifleModel = gltf.scene;
-
+  gun = clone(rifleModel);
   if (player) {
-    addGunToPlayer(player, rifleModel);
+    addGunToPlayer(player, gun);
   }
 },
   (error) => {
