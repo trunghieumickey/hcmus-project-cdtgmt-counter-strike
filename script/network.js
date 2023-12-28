@@ -1,6 +1,7 @@
 import mqtt from "mqtt";
 import { player, scene } from "./index.js";
 import * as THREE from "three";
+import { takeDamage, addKillFeedEntry } from "./UI.js";
 
 const client = mqtt.connect('wss://test.mosquitto.org:8081');
 const topic = 'hcmus-cs';
@@ -9,6 +10,12 @@ const targetPositions = [];
 
 export function sendMessage(message) {
     client.publish(topic, message);
+}
+
+var player_shot, enemyID;
+export function doDamage(targetPlayerID) {
+    enemyID = targetPlayerID;
+    player_shot = true;
 }
 
 export function updateNetworkPlayers(deltaTime) {
@@ -50,7 +57,7 @@ function messageHandler(message) {
                     scene.add(player);
                 }
                 // player.position.set(message.position.x, message.position.y, message.position.z);
-                
+
                 targetPositions[message.playerID] = message.position;
                 player.rotation.y = message.position.r;
                 console.log("player: ", player.position);
@@ -70,6 +77,11 @@ function messageHandler(message) {
         //         createPlayer(message.playerID, x, y, z, r);
         //     }
         //     break;
+        case 'damage':
+            if (message.targetPlayerID === playerID) {
+                takeDamage(message.amount);
+            }
+            break;
         default:
             break;
     }
@@ -96,6 +108,17 @@ client.on('connect', () => {
         if (currentMessage !== lastSentMessage) {
             sendMessage(currentMessage);
             lastSentMessage = currentMessage;
+        }
+
+        if (player_shot) {
+            const message = JSON.stringify({
+                playerID: playerID,
+                action: 'damage',
+                targetPlayerID: enemyID,
+                amount: 25,
+            });
+            sendMessage(message);
+            player_shot = false;
         }
     }, 50);
 });

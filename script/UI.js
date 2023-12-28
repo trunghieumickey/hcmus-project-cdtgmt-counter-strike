@@ -51,14 +51,17 @@ function updateHealthBar() {
         healthBarElement.style.backgroundColor = 'green';
     } else if (health > 50) {
         healthBarElement.style.backgroundColor = 'yellow';
+        healthText.style.color = 'black';
     } else if (health > 25) {
         healthBarElement.style.backgroundColor = 'orange';
+        healthText.style.color = 'black';
     } else {
         healthBarElement.style.backgroundColor = 'red';
+        healthText.style.color = 'black';
     }
 }
 
-function takeDamage(amount) {
+export function takeDamage(amount) {
     health -= amount;
     updateHealthBar();
 }
@@ -165,10 +168,62 @@ function createCrosshair() {
     document.body.appendChild(crosshair);
 }
 
+// Create dead screen
+function createDeadScreen() {
+    const deadScreen = document.createElement('div');
+    deadScreen.style.position = 'absolute';
+    deadScreen.style.left = '0';
+    deadScreen.style.top = '0';
+    deadScreen.style.width = '100%';
+    deadScreen.style.height = '100%';
+    deadScreen.style.backgroundColor = 'black';
+    deadScreen.style.color = 'white';
+    deadScreen.style.fontSize = '50px';
+    deadScreen.style.textAlign = 'center';
+    deadScreen.style.paddingTop = '200px';
+    deadScreen.textContent = 'You are dead!';
+
+    document.body.appendChild(deadScreen);
+}
+
+export function showDeadScreen() {
+    createDeadScreen();
+}
+
+// Create kill feed
+function createKillFeed() {
+    const killFeed = document.createElement('div');
+    killFeed.style.position = 'absolute';
+    killFeed.style.left = '0';
+    killFeed.style.top = '0';
+    killFeed.style.width = '100%';
+    killFeed.style.height = '100%';
+    killFeed.style.color = 'white';
+    killFeed.style.fontSize = '30px';
+    killFeed.style.textAlign = 'center';
+    killFeed.style.paddingTop = '50px';
+
+    document.body.appendChild(killFeed);
+}
+
+export function addKillFeedEntry(killerName, victimName) {
+    const killFeed = document.querySelector('#kill-feed');
+    if (killFeed) {
+        const entry = document.createElement('div');
+        entry.textContent = `${killerName} killed ${victimName}`;
+        killFeed.appendChild(entry);
+
+        // Remove the entry after 5 seconds
+        setTimeout(() => {
+            killFeed.removeChild(entry);
+        }, 5000);
+    }
+}
+
 export function createUI() {
     createHealthBar();
     createBulletsBar();
     createCrosshair();
 }
 
-export { bullets }
+export { bullets, health }

@@ -2,6 +2,7 @@ import { camera, player, scene, listener, gun, rifleModel } from './index.js';
 import { playerOnFloor } from './player.js';
 import { createGunBullet } from './gun_bullet.js';
 import { bullets, takeBullets, reloadBullets } from './UI.js';
+import { doDamage } from './network.js';
 import * as THREE from 'three';
 export const keyStates = {};
 let mouseTime = 0;
@@ -115,7 +116,7 @@ audioLoader.load('sound/AK-47.mp3', function (buffer) {
     gunSound.setBuffer(buffer);
 });
 
-let Bullets = [];
+var enemyID;
 function shoot() {
     // Create a raycaster
     const raycaster = new THREE.Raycaster();
@@ -143,9 +144,22 @@ function shoot() {
         gunSound.play();
     }
 
+    // Check if line touches a target player, that player will take damage
+    if (intersects.length > 0) {
+        let target = intersects[0].object; // Change const to let
+        console.log("target: ", target);
+        //target name is hash code
+        if (target.name != player.name) {
+            if (target.name != "Object_4" && target.name != "") {
+                enemyID = target.name;
+                console.log("enemyID: ", enemyID);
+                doDamage(enemyID);
+            }
+        }
+    }
+
     // Remove the bullet and line after 1 second
     setTimeout(() => {
         scene.remove(line);
-        // scene.remove(bullet);
     }, 1000);
 }
