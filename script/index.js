@@ -145,9 +145,6 @@ function onWindowResize() {
 
 }
 
-
-
-
 // ====================== Player ======================
 
 // Add gun to player

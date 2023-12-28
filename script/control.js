@@ -117,12 +117,6 @@ audioLoader.load('sound/AK-47.mp3', function (buffer) {
 
 let Bullets = [];
 function shoot() {
-    // // Create a bullet
-    // const bullet = createGunBullet();
-    // bullet.position.copy(camera.position);
-    // bullet.bulletVelocity.copy(getBulletVector().multiplyScalar(100));
-    // Bullets.push(bullet);
-
     // Create a raycaster
     const raycaster = new THREE.Raycaster();
     raycaster.set(camera.position, getBulletVector());
