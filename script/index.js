@@ -160,7 +160,7 @@ function addGunToPlayer(player, rifleModel) {
 // Create a player
 var characterModel, characterBox, mixer, player;
 let characterFrame = new THREE.Clock();
-gltfLoader.load('./model/walking.glb', (gltf) => {
+gltfLoader.load('./model/player.glb', (gltf) => {
   characterModel = gltf.scene;
 
   player = createPlayer(characterModel);
@@ -170,11 +170,14 @@ gltfLoader.load('./model/walking.glb', (gltf) => {
   if (rifleModel) {
     addGunToPlayer(player, rifleModel);
   }
+  // Player animations
+  const walking = gltf.animations[0];
+  const dying = gltf.animations[1];
 
-  const animation = gltf.animations[0];
   mixer = new THREE.AnimationMixer(characterModel);
-  const action = mixer.clipAction(animation);
+  const action = mixer.clipAction(walking);
   action.play();
+
   animate();
 },
   (error) => {
