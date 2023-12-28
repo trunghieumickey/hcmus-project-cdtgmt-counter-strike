@@ -149,11 +149,11 @@ function onWindowResize() {
 // ====================== Player ======================
 
 // Add gun to player
-function addGunToPlayer(player, rifleModel) {
-  player.add(rifleModel);
-  rifleModel.position.set(-0.15, 1.4, 0.5);
-  rifleModel.scale.set(0.002, 0.002, 0.002);
-  rifleModel.rotation.set(0, -Math.PI / 2 + 0.1, 0);
+function addGunToPlayer(player, gun) {
+  player.add(gun);
+  gun.position.set(-0.15, 1.4, 0.5);
+  gun.scale.set(0.002, 0.002, 0.002);
+  gun.rotation.set(0, -Math.PI / 2 + 0.1, 0);
 }
 
 // Create a player
@@ -209,7 +209,7 @@ gltfLoader.load('./model/ak47.glb', (gltf) => {
 
 control();
 
-export { worldOctree, player, rifleModel, camera, scene, listener };
+export { worldOctree, player, gun, rifleModel, camera, scene, listener };
 
 function updateOverviewCamera() {
   overviewCamera.position.x = camera.position.x;

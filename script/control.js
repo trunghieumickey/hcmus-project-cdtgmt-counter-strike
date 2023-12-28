@@ -1,4 +1,4 @@
-import { camera, player, scene, listener, rifleModel } from './index.js';
+import { camera, player, scene, listener, gun, rifleModel } from './index.js';
 import { playerOnFloor } from './player.js';
 import { createGunBullet } from './gun_bullet.js';
 import { bullets, takeBullets, reloadBullets } from './UI.js';
@@ -128,7 +128,7 @@ function shoot() {
     // Create a line to visualize the bullet trajectory
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
     const points = [];
-    points.push(new THREE.Vector3().copy(new THREE.Box3().setFromObject(rifleModel).getCenter(new THREE.Vector3())));
+    points.push(new THREE.Vector3().copy(new THREE.Box3().setFromObject(gun).getCenter(new THREE.Vector3())));
     const ak47Range = intersects.length > 0 ? intersects[0].distance : 38;
     points.push(new THREE.Vector3().copy(camera.position).add(getBulletVector().multiplyScalar(ak47Range)));
     const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
