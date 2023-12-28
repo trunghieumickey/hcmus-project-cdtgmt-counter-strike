@@ -194,7 +194,7 @@ export function playWalkingAnimation() {
   action.play();
 }
 
-let gun;
+let gun, rifleModel;
 gltfLoader.load('./model/ak47.glb', (gltf) => {
   rifleModel = gltf.scene;
   gun = clone(rifleModel);
