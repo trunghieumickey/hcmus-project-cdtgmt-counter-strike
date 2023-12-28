@@ -1,5 +1,5 @@
-import { camera, player, scene, listener, gun, rifleModel } from './index.js';
-import { playerOnFloor } from './player.js';
+import { camera, player, scene, listener, gun, playDyingAnimation } from './index.js';
+import { playerOnFloor, playerAlive } from './player.js';
 import { createGunBullet } from './gun_bullet.js';
 import { bullets, takeBullets, reloadBullets } from './UI.js';
 import { doDamage } from './network.js';
@@ -96,6 +96,10 @@ export function controls(deltaTime, characterFrame, mixer) {
             }
         }
 
+        if (!playerAlive) {
+            playDyingAnimation(mixer);
+            mixer.update(characterDelta);
+        }
         //Reload bullets
         if (keyStates['KeyR']) {
             reloadBullets();

@@ -3,6 +3,7 @@ import { Capsule } from 'three/addons/math/Capsule.js';
 import { worldOctree, player, camera } from './index.js';
 
 export let playerOnFloor = false;
+export let playerAlive = true;
 const GRAVITY = 30;
 //const x = 102, z = -67;
 const x = 106, z = -19;

@@ -158,7 +158,7 @@ function addGunToPlayer(player, gun) {
 
 // Create a player
 var mixer, player;
-var walking, dying;
+var actions, walkingAction, dyingAction;
 let characterFrame = new THREE.Clock();
 gltfLoader.load('./model/player.glb', (gltf) => {
   const characterModel = clone(gltf.scene);
@@ -171,13 +171,19 @@ gltfLoader.load('./model/player.glb', (gltf) => {
     addGunToPlayer(player, gun);
   }
   // Player animations
-  walking = gltf.animations[0];
-  dying = gltf.animations[1];
-
   mixer = new THREE.AnimationMixer(player);
+  walkingAction = mixer.clipAction(gltf.animations[0]);
+  dyingAction = mixer.clipAction(gltf.animations[1]);
+  dyingAction.clampWhenFinished = true;
+  dyingAction.loop = THREE.LoopOnce;
+  
+  actions = [walkingAction, dyingAction]
+  actions.forEach((action) => {
+    action.play();
+  });
+
   playWalkingAnimation();
 
-  animate();
 },
   (error) => {
     console.warn('Unknown mesh character model:', error);
@@ -185,13 +191,13 @@ gltfLoader.load('./model/player.glb', (gltf) => {
 );
 
 export function playDyingAnimation() {
-  const action = mixer.clipAction(dying);
-  action.play();
+  walkingAction.enabled = false;
+  dyingAction.enabled = true;
 }
 
 export function playWalkingAnimation() {
-  const action = mixer.clipAction(walking);
-  action.play();
+  dyingAction.enabled = false;
+  walkingAction.enabled = true;
 }
 
 let gun, rifleModel;
