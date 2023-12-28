@@ -193,6 +193,7 @@ gltfLoader.load('./model/player.glb', (gltf) => {
 export function playDyingAnimation() {
   walkingAction.enabled = false;
   dyingAction.enabled = true;
+  gun.position.y = 0;
 }
 
 export function playWalkingAnimation() {
