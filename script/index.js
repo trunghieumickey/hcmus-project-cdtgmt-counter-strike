@@ -155,7 +155,7 @@ function addGunToPlayer(player, rifleModel) {
   player.add(rifleModel);
   rifleModel.position.set(-0.15, 1.4, 0.5);
   rifleModel.scale.set(0.002, 0.002, 0.002);
-  rifleModel.rotation.set(0, -Math.PI/2 + 0.1, 0);
+  rifleModel.rotation.set(0, -Math.PI / 2 + 0.1, 0);
 }
 // Create a player
 var characterModel, characterBox, mixer, player;
@@ -167,10 +167,10 @@ gltfLoader.load('./model/walking.glb', (gltf) => {
   scene.add(player);
 
   // Add gun to player
-  if(rifleModel) {
+  if (rifleModel) {
     addGunToPlayer(player, rifleModel);
   }
-  
+
   const animation = gltf.animations[0];
   mixer = new THREE.AnimationMixer(characterModel);
   const action = mixer.clipAction(animation);
@@ -186,7 +186,7 @@ let rifleModel;
 gltfLoader.load('./model/ak47.glb', (gltf) => {
   rifleModel = gltf.scene;
 
-  if(player) {
+  if (player) {
     addGunToPlayer(player, rifleModel);
   }
 },
@@ -197,7 +197,7 @@ gltfLoader.load('./model/ak47.glb', (gltf) => {
 
 control();
 
-export { worldOctree, player, rifleModel, camera, characterBox, scene, listener};
+export { worldOctree, player, rifleModel, camera, characterBox, scene, listener, characterModel };
 
 function updateOverviewCamera() {
   overviewCamera.position.x = camera.position.x;
