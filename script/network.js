@@ -1,5 +1,5 @@
 import mqtt from "mqtt";
-import { player, characterModel, scene } from "./index.js";
+import { player, scene } from "./index.js";
 import * as THREE from "three";
 
 const client = mqtt.connect('wss://test.mosquitto.org:8081');

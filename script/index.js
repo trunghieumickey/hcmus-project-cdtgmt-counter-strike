@@ -162,7 +162,7 @@ var mixer, player;
 var walking, dying;
 let characterFrame = new THREE.Clock();
 gltfLoader.load('./model/player.glb', (gltf) => {
-  characterModel = gltf.scene;
+  const characterModel = gltf.scene;
 
   player = createPlayer(characterModel);
   scene.add(player);
@@ -176,8 +176,7 @@ gltfLoader.load('./model/player.glb', (gltf) => {
   dying = gltf.animations[1];
 
   mixer = new THREE.AnimationMixer(characterModel);
-  const action = mixer.clipAction(walking);
-  action.play();
+  playWalkingAnimation();
 
   animate();
 },
@@ -188,6 +187,11 @@ gltfLoader.load('./model/player.glb', (gltf) => {
 
 export function playDyingAnimation() {
   const action = mixer.clipAction(dying);
+  action.play();
+}
+
+export function playWalkingAnimation() {
+  const action = mixer.clipAction(walking);
   action.play();
 }
 
