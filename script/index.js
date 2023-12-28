@@ -154,6 +154,7 @@ function addGunToPlayer(player, rifleModel) {
   rifleModel.scale.set(0.002, 0.002, 0.002);
   rifleModel.rotation.set(0, -Math.PI / 2 + 0.1, 0);
 }
+
 // Create a player
 var mixer, player;
 var walking, dying;
@@ -172,7 +173,7 @@ gltfLoader.load('./model/player.glb', (gltf) => {
   walking = gltf.animations[0];
   dying = gltf.animations[1];
 
-  mixer = new THREE.AnimationMixer(characterModel);
+  mixer = new THREE.AnimationMixer(player);
   playWalkingAnimation();
 
   animate();
