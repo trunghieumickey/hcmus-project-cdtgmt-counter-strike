@@ -161,7 +161,7 @@ var mixer, player;
 var walking, dying;
 let characterFrame = new THREE.Clock();
 gltfLoader.load('./model/player.glb', (gltf) => {
-  const characterModel = gltf.scene;
+  const characterModel = clone(gltf.scene);
 
   player = createPlayer(characterModel);
   scene.add(player);
