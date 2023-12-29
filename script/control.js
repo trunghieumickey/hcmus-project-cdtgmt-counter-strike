@@ -1,7 +1,7 @@
 import { camera, player, scene, listener, gun, playDyingAnimation } from './index.js';
 import { playerOnFloor, playerAlive } from './player.js';
 import { createGunBullet } from './gun_bullet.js';
-import { bullets, takeBullets, reloadBullets } from './UI.js';
+import { bullets, takeBullets, reloadBullets, health } from './UI.js';
 import { doDamage } from './network.js';
 import * as THREE from 'three';
 export const keyStates = {};
@@ -24,7 +24,7 @@ export function control() {
     });
 
     document.addEventListener('mouseup', () => {
-        if (document.pointerLockElement !== null && bullets > 0) {
+        if (document.pointerLockElement !== null && bullets > 0 && health > 0) {
             shoot();
             takeBullets(1);
         };

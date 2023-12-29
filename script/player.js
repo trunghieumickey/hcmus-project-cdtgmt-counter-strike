@@ -6,17 +6,29 @@ export let playerOnFloor = false;
 export let playerAlive = true;
 const GRAVITY = 30;
 //const x = 102, z = -67;
-const x = 106, z = -19;
+const respawnLocations = [
+    { x: 105.67, z: -68.99 },
+    { x: 87.68, z: 10.14 },
+    { x: 57.15, z: 24.18 },
+    { x: 23.2, z: -46.92 },
+    { x: 61.66, z: -19.22 },
+    { x: 24.55, z: 23.75 },
+    { x: -8.18, z: 23.62 },
+    { x: -45.84, z: 50.33 },
+    { x: 106, z: -19 },
+    { x: -77.17, z: -48.37 },
+];
 const humanWidth = 0.3, humanHeight = 1.6;
 
 export function createPlayer(model) {
     // const Player = new THREE.Object3D();
     // if (!characterModel) throw new Error('Character model not loaded');
+    const location = respawnLocations[Math.floor(Math.random() * respawnLocations.length)];
     const Player = model;
     Player.scale.set(0.1, 0.1, 0.1);
     Player.playerDirection = new THREE.Vector3();
     Player.PlayerGeometry = new THREE.CylinderGeometry(humanWidth, humanWidth, humanHeight, 32);
-    Player.playerCollider = new Capsule(new THREE.Vector3(x, humanWidth, z), new THREE.Vector3(x, humanHeight, z), humanWidth);
+    Player.playerCollider = new Capsule(new THREE.Vector3(location.x, humanWidth, location.z), new THREE.Vector3(location.x, humanHeight, location.z), humanWidth);
     // Player.playerCollider = new Capsule(characterBox.min, characterBox.max, humanWidth);
     // console.log(characterBox.max.sub(characterBox.min));
     Player.playerVelocity = new THREE.Vector3();
@@ -72,4 +84,13 @@ export function updatePlayer(deltaTime) {
         player.position.copy(player.playerCollider.end);
         player.position.y -= player.playerCollider.radius;
     }
+}
+
+export function respawnPlayer() {
+    const location = respawnLocations[Math.floor(Math.random() * respawnLocations.length)];
+    player.playerCollider.start.set(location.x, humanWidth, location.z);
+    player.playerCollider.end.set(location.x, humanHeight, location.z);
+    player.playerCollider.radius = humanWidth;
+    camera.position.copy(player.playerCollider.end);
+    camera.rotation.set(0, 0, 0);
 }
