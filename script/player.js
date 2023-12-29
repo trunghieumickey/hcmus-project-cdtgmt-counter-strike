@@ -90,12 +90,3 @@ export function updatePlayer(deltaTime) {
         player.position.y -= player.playerCollider.radius;
     }
 }
-
-export function respawnPlayer() {
-    const location = respawnLocations[Math.floor(Math.random() * respawnLocations.length)];
-    player.playerCollider.start.set(location.x, humanWidth, location.z);
-    player.playerCollider.end.set(location.x, humanHeight, location.z);
-    player.playerCollider.radius = humanWidth;
-    camera.position.copy(player.playerCollider.end);
-    camera.rotation.set(0, 0, 0);
-}
