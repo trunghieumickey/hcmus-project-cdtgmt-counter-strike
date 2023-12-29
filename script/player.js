@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Capsule } from 'three/addons/math/Capsule.js';
 import { worldOctree, player, camera } from './index.js';
-import { healthSet } from './UI.js';
+import { healthSet, reloadBullets } from './UI.js';
 
 export let playerOnFloor = false;
 export let playerAlive = true;
@@ -50,6 +50,7 @@ export function createPlayer(model) {
 
 export function respawnPlayer() {
     healthSet(100);
+    reloadBullets();
     const location = respawnLocations[Math.floor(Math.random() * respawnLocations.length)];
     player.playerCollider.start.set(location.x, humanWidth, location.z);
     player.playerCollider.end.set(location.x, humanHeight, location.z);
