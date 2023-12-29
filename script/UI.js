@@ -62,14 +62,6 @@ function updateHealthBar() {
         healthBarElement.style.backgroundColor = 'red';
         healthText.style.color = 'black';
     }
-
-    if (health <= 0) {
-        setTimeout(() => {
-            health = 100;
-            updateHealthBar();
-        }, 3000);
-    }
-
 }
 
 export function takeDamage(amount) {
@@ -204,7 +196,6 @@ function createDeadScreen() {
     //After 3 seconds, remove the dead screen
     setTimeout(() => {
         deadScreen.remove();
-        respawnPlayer();
         respawnPlayer();
     }, 3000);
 }
