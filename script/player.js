@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Capsule } from 'three/addons/math/Capsule.js';
 import { worldOctree, player, camera } from './index.js';
+import { healthSet } from './UI.js';
 
 export let playerOnFloor = false;
 export let playerAlive = true;
@@ -35,14 +36,18 @@ export function createPlayer(model) {
     return Player;
 }
 
+export function respawnPlayer() {
+    healthSet(100);
+    player.playerCollider.start.set(x, humanWidth, z);
+    player.playerCollider.end.set(x, humanHeight, z);
+    player.playerCollider.radius = humanWidth;
+    player.playerVelocity.set(0, 0, 0);
+    camera.position.copy(player.playerCollider.end);
+    camera.rotation.set(0, 0, 0);
+}
+
 export function teleportPlayerIfOob() {
-    if (camera.position.y <= - 25) {
-        player.playerCollider.start.set(x, humanWidth, z);
-        player.playerCollider.end.set(x, 1, z);
-        player.playerCollider.radius = humanWidth;
-        camera.position.copy(player.playerCollider.end);
-        camera.rotation.set(0, 0, 0);
-    }
+    if (camera.position.y <= - 25) respawnPlayer();
 }
 
 function playerCollisions() {

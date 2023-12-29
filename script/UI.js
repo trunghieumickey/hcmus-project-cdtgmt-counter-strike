@@ -1,4 +1,6 @@
-let health = 100;
+import { respawnPlayer } from "./player.js";
+
+export var maxBullets = 25, bullets = maxBullets, health = 100;
 let healthBarElement;
 let healthText;
 
@@ -66,8 +68,13 @@ export function takeDamage(amount) {
     updateHealthBar();
 }
 
+export function healthSet(amount) {
+    health = amount;
+    updateHealthBar();
+}
+
 //Bullets Bar 
-let maxBullets = 25, bullets = maxBullets;
+
 let bulletsBarElement, bulletsText;
 
 function createBulletsBar() {
@@ -188,6 +195,7 @@ function createDeadScreen() {
     //After 3 seconds, remove the dead screen
     setTimeout(() => {
         deadScreen.remove();
+        respawnPlayer();
     }, 3000);
 }
 
@@ -200,5 +208,3 @@ export function createUI() {
     createBulletsBar();
     createCrosshair();
 }
-
-export { bullets, health }

@@ -1,7 +1,7 @@
 import mqtt from "mqtt";
 import { player, scene } from "./index.js";
 import * as THREE from "three";
-import { takeDamage, showDeadScreen, health } from "./UI.js";
+import { takeDamage, showDeadScreen, health} from "./UI.js";
 
 
 const client = mqtt.connect('wss://test.mosquitto.org:8081');
@@ -64,33 +64,18 @@ function messageHandler(message) {
                 console.log("player: ", player.position);
             }
             break;
-        // case 'remove':
-        //     if (message.playerID !== playerID) {
-        //         const player = scene.getObjectByName(message.playerID);
-        //         if (player) {
-        //             scene.remove(player);
-        //         }
-        //     }
-        //     break;
-        // case 'create':
-        //     if (message.playerID !== playerID) {
-        //         const { x, y, z, r } = message.position;
-        //         createPlayer(message.playerID, x, y, z, r);
-        //     }
-        //     break;
         case 'damage':
             if (message.targetPlayerID === playerID) {
                 takeDamage(message.amount);
             }
             break;
-        case 'you_died':
-            if (message.playerID === playerID) {
-                showDeadScreen();
+        case 'died':
+            if (message.playerID !== playerID) {
+                null;
+                //add a logic here to handle
                 //your model will be removed
                 const player = scene.getObjectByName(message.playerID);
-                if (player) {
-                    scene.remove(player);
-                }
+                if (player) scene.remove(player);
             }
             break;
         default:
@@ -132,12 +117,12 @@ client.on('connect', () => {
             player_shot = false;
         }
         if (health <= 0) {
-            console.log("you died");
             const message = JSON.stringify({
                 playerID: playerID,
-                action: 'you_died',
+                action: 'died',
             });
             sendMessage(message);
+            showDeadScreen();
         }
     }, 50);
 });
@@ -145,4 +130,7 @@ client.on('connect', () => {
 client.on('message', (topic, message) => {
     message = JSON.parse(message);
     messageHandler(message);
+    if (message.action !== 'move') {
+        console.log(message);
+    }
 });
