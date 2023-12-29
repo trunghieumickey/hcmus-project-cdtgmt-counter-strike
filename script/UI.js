@@ -51,6 +51,7 @@ function updateHealthBar() {
     // Change the color of the health bar based on the player's health
     if (health > 75) {
         healthBarElement.style.backgroundColor = 'green';
+        healthText.style.color = 'white';
     } else if (health > 50) {
         healthBarElement.style.backgroundColor = 'yellow';
         healthText.style.color = 'black';
@@ -61,6 +62,14 @@ function updateHealthBar() {
         healthBarElement.style.backgroundColor = 'red';
         healthText.style.color = 'black';
     }
+
+    if (health <= 0) {
+        setTimeout(() => {
+            health = 100;
+            updateHealthBar();
+        }, 3000);
+    }
+
 }
 
 export function takeDamage(amount) {
@@ -195,6 +204,7 @@ function createDeadScreen() {
     //After 3 seconds, remove the dead screen
     setTimeout(() => {
         deadScreen.remove();
+        respawnPlayer();
         respawnPlayer();
     }, 3000);
 }
