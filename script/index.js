@@ -150,6 +150,7 @@ function onWindowResize() {
 
 // Add gun to player
 function addGunToPlayer(player, gun) {
+  gun = clone(rifleModel);
   player.add(gun);
   gun.position.set(-0.15, 1.4, 0.5);
   gun.scale.set(0.002, 0.002, 0.002);
@@ -157,11 +158,11 @@ function addGunToPlayer(player, gun) {
 }
 
 // Create a player
-var mixer, player;
+var mixer, characterModel, player;
 var actions, walkingAction, dyingAction;
 let characterFrame = new THREE.Clock();
 gltfLoader.load('./model/player.glb', (gltf) => {
-  const characterModel = clone(gltf.scene);
+  characterModel = gltf.scene;
 
   player = createPlayer(characterModel);
   scene.add(player);
@@ -204,7 +205,6 @@ export function playWalkingAnimation() {
 let gun, rifleModel;
 gltfLoader.load('./model/ak47.glb', (gltf) => {
   rifleModel = gltf.scene;
-  gun = clone(rifleModel);
   if (player) {
     addGunToPlayer(player, gun);
   }
