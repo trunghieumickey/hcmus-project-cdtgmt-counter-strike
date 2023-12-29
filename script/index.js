@@ -177,7 +177,7 @@ gltfLoader.load('./model/player.glb', (gltf) => {
   dyingAction = mixer.clipAction(gltf.animations[1]);
   dyingAction.clampWhenFinished = true;
   dyingAction.loop = THREE.LoopOnce;
-  
+
   actions = [walkingAction, dyingAction]
   actions.forEach((action) => {
     action.play();
@@ -244,8 +244,8 @@ document.body.appendChild(cameraPositionElement);
 
 function animate() {
   // Update the camera position element
-  cameraPositionElement.textContent = `Camera position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}`;
-
+  // cameraPositionElement.textContent = `Camera position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}`;
+  cameraPositionElement.textContent = `HCMUS-CS ALPHA FPS v0.75`;
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 
   // we look for collisions in substeps to mitigate the risk of
