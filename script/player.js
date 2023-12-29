@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { Capsule } from 'three/addons/math/Capsule.js';
 import { worldOctree, player, camera } from './index.js';
 import { healthSet, reloadBullets } from './UI.js';
-import { clone } from 'three/addons/utils/SkeletonUtils.js';
 
 export let playerOnFloor = false;
 export let playerAlive = true;
@@ -26,7 +25,7 @@ export function createPlayer(model) {
     // const Player = new THREE.Object3D();
     // if (!characterModel) throw new Error('Character model not loaded');
     const location = respawnLocations[Math.floor(Math.random() * respawnLocations.length)];
-    const Player = clone(model);
+    const Player = model;
     Player.scale.set(0.1, 0.1, 0.1);
     Player.playerDirection = new THREE.Vector3();
     Player.PlayerGeometry = new THREE.CylinderGeometry(humanWidth, humanWidth, humanHeight, 32);
