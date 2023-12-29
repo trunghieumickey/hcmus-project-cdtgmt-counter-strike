@@ -149,7 +149,8 @@ function onWindowResize() {
 // ====================== Player ======================
 
 // Add gun to player
-function addGunToPlayer(player, gun) {
+export function addGunToPlayer(player, rifleModel) {
+  gun = clone(rifleModel);
   player.add(gun);
   gun.position.set(-0.15, 1.4, 0.5);
   gun.scale.set(0.002, 0.002, 0.002);
@@ -157,18 +158,18 @@ function addGunToPlayer(player, gun) {
 }
 
 // Create a player
-var mixer, player;
+var mixer, player, characterModel;
 var actions, walkingAction, dyingAction;
 let characterFrame = new THREE.Clock();
 gltfLoader.load('./model/player.glb', (gltf) => {
-  const characterModel = clone(gltf.scene);
+  characterModel = gltf.scene;
 
   player = createPlayer(characterModel);
   scene.add(player);
 
   // Add gun to player
-  if (gun) {
-    addGunToPlayer(player, gun);
+  if (rifleModel) {
+    addGunToPlayer(player, rifleModel);
   }
   // Player animations
   mixer = new THREE.AnimationMixer(player);
@@ -206,7 +207,7 @@ gltfLoader.load('./model/ak47.glb', (gltf) => {
   rifleModel = gltf.scene;
   gun = clone(rifleModel);
   if (player) {
-    addGunToPlayer(player, gun);
+    addGunToPlayer(player, rifleModel);
   }
 },
   (error) => {
@@ -216,7 +217,7 @@ gltfLoader.load('./model/ak47.glb', (gltf) => {
 
 control();
 
-export { worldOctree, player, gun, rifleModel, camera, scene, listener };
+export { worldOctree, player, characterModel, gun, rifleModel, camera, scene, listener };
 
 function updateOverviewCamera() {
   overviewCamera.position.x = camera.position.x;
