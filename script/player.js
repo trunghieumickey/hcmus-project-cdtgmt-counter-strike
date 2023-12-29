@@ -50,10 +50,10 @@ export function createPlayer(model) {
 
 export function respawnPlayer() {
     healthSet(100);
-    player.playerCollider.start.set(x, humanWidth, z);
-    player.playerCollider.end.set(x, humanHeight, z);
+    const location = respawnLocations[Math.floor(Math.random() * respawnLocations.length)];
+    player.playerCollider.start.set(location.x, humanWidth, location.z);
+    player.playerCollider.end.set(location.x, humanHeight, location.z);
     player.playerCollider.radius = humanWidth;
-    player.playerVelocity.set(0, 0, 0);
     camera.position.copy(player.playerCollider.end);
     camera.rotation.set(0, 0, 0);
 }
