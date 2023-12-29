@@ -26,6 +26,12 @@ export function updateNetworkPlayers(deltaTime) {
     for (const playerID in targetPositions) {
         const targetPosition = targetPositions[playerID];
         const player = scene.getObjectByName(playerID);
+        // remove the player is idling for 30s
+        if (player && performance.now() - player.lastTimeStamp > 30000) {
+            scene.remove(player);
+            delete targetPositions[playerID];
+            console.log("Remove player: ", playerID);
+        }
         if (player) {
             const distanceX = targetPosition.x - player.position.x;
             const distanceY = targetPosition.y - player.position.y;
@@ -54,14 +60,14 @@ function messageHandler(message) {
                         new THREE.MeshStandardMaterial({ color: 0xffffff })
                     );
                     player.name = message.playerID;
-                    console.log("add new player")
+                    player.lastTimeStamp = performance.now();
+                    console.log("Add new player: ", player.name);
                     scene.add(player);
                 }
                 // player.position.set(message.position.x, message.position.y, message.position.z);
 
                 targetPositions[message.playerID] = message.position;
                 player.rotation.y = message.position.r;
-                console.log("player: ", player.position);
             }
             break;
         case 'damage':
@@ -130,7 +136,4 @@ client.on('connect', () => {
 client.on('message', (topic, message) => {
     message = JSON.parse(message);
     messageHandler(message);
-    if (message.action !== 'move') {
-        console.log(message);
-    }
 });
