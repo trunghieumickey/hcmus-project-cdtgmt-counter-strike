@@ -88,7 +88,7 @@ let lastSentMessage = null;
 client.on('connect', () => {
     console.log('Connected to MQTT broker');
     client.subscribe(topic);
-    //for every 50ms, send a message to the server
+    //for every 500ms, send a message to the server
     setInterval(() => {
         const currentMessage = JSON.stringify({
             playerID: playerID,

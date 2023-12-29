@@ -150,11 +150,13 @@ function shoot() {
 
     // Check if line touches a target player, that player will take damage
     if (intersects.length > 0) {
-        let target = intersects[0].object;
+        let target = intersects[0].object; // Change const to let
         console.log("target: ", target);
+        //target name is hash code
         if (target.name != player.name) {
             if (target.name != "Object_4" && target.name != "") {
                 enemyID = target.name;
+                console.log("enemyID: ", enemyID);
                 doDamage(enemyID);
             }
         }
