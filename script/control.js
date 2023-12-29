@@ -134,7 +134,20 @@ function shoot() {
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
     const points = [];
     points.push(new THREE.Vector3().copy(new THREE.Box3().setFromObject(gun).getCenter(new THREE.Vector3())));
-    const ak47Range = intersects.length > 0 ? intersects[0].distance : 38;
+
+
+    // const ak47Range = intersects.length > 0 ? intersects[0].distance : 1000;
+    var ak47Range = 100;
+    if (intersects.length > 0) {
+        for (let i = 0; i < intersects.length; i++) {
+            if (intersects[i].object.type != "Line") {
+                var ak47Range = intersects[i].distance;
+                break;
+            }
+        }
+    }
+
+
     points.push(new THREE.Vector3().copy(camera.position).add(getBulletVector().multiplyScalar(ak47Range)));
     const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
     const line = new THREE.Line(lineGeometry, lineMaterial);
@@ -150,14 +163,24 @@ function shoot() {
 
     // Check if line touches a target player, that player will take damage
     if (intersects.length > 0) {
-        let target = intersects[0].object; // Change const to let
-        console.log("target: ", target);
-        //target name is hash code
-        if (target.name != player.name) {
-            if (target.name != "Object_4" && target.name != "") {
+        // let target = intersects[0].object; // Change const to let
+        // console.log("target: ", target);
+        // //target name is hash code
+        // if (target.name != player.name) {
+        //     if (target.name != "Object_4" && target.name != "") {
+        //         enemyID = target.name;
+        //         console.log("enemyID: ", enemyID);
+        //         doDamage(enemyID);
+        //     }
+        // }
+        for (let i = 0; i < intersects.length; i++) {
+            let target = intersects[i].object;
+            if (target.name != player.name && target.name != "Object_4" && target.name != "") {
                 enemyID = target.name;
                 console.log("enemyID: ", enemyID);
                 doDamage(enemyID);
+                break;
+
             }
         }
     }
